@@ -2,10 +2,6 @@ using ksqlDB.RestApi.Client.KSql.Linq;
 using ksqlDB.RestApi.Client.KSql.Query.Context;
 using ksqlDB.RestApi.Client.KSql.Query.Options;
 
-using Microsoft.Extensions.Options;
-
-using WikiEditStream.Configuration;
-
 using Xunit.Abstractions;
 
 namespace WikiEditStream.Tests;
@@ -16,6 +12,7 @@ public class Tweet : Record
 
     public string Message { get; set; }
 }
+
 
 //https://github.com/tomasfabian/ksqlDB.RestApi.Client-DotNet
 public class TestOfKsqlDb

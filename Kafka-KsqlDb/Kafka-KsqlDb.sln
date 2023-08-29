@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34018.315
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KsqlDb", "KsqlDb\KsqlDb.csproj", "{DB3FD1F9-D973-4A79-BD75-6009743E8FD7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KsqlDbTests", "KsqlDb.Tests\KsqlDbTests.csproj", "{20118E17-D8E0-4A90-BF6C-382CC01D966F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DB3FD1F9-D973-4A79-BD75-6009743E8FD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB3FD1F9-D973-4A79-BD75-6009743E8FD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB3FD1F9-D973-4A79-BD75-6009743E8FD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB3FD1F9-D973-4A79-BD75-6009743E8FD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20118E17-D8E0-4A90-BF6C-382CC01D966F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20118E17-D8E0-4A90-BF6C-382CC01D966F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20118E17-D8E0-4A90-BF6C-382CC01D966F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20118E17-D8E0-4A90-BF6C-382CC01D966F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D83B2424-C1F1-4FAF-B9DA-E1ACE6854ABC}
+	EndGlobalSection
+EndGlobal
