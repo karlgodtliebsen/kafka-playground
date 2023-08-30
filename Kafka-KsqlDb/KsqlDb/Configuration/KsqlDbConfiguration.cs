@@ -8,6 +8,7 @@ public class KsqlDbConfiguration : ClientConfig
 
     public string? EndPoint { get; set; } = default!;
 
-    public string? Topic { get; set; } = default!;
-
+    public string? KafkaTopic { get; set; } = default!;
+    public string? ClusterName { get; set; } = default!; 
+    public string? ClusterId { get; set; } = default!;
 }

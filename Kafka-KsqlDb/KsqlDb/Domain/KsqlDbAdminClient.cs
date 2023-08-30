@@ -3,40 +3,32 @@ using ksqlDB.RestApi.Client.KSql.RestApi;
 using ksqlDB.RestApi.Client.KSql.RestApi.Http;
 using ksqlDB.RestApi.Client.KSql.RestApi.Statements;
 using Microsoft.Extensions.Options;
+using KsqlDb.Domain.Models;
+using System.Threading;
 
 namespace KsqlDb.Domain;
 
 public class KsqlDbAdminClient
 {
+    private readonly IKSqlDbRestApiClient restApiClient;
     private readonly KsqlDbConfiguration config;
 
-    public KsqlDbAdminClient(IOptions<KsqlDbConfiguration> options)
+    public KsqlDbAdminClient(IKSqlDbRestApiClient restApiClient, IOptions<KsqlDbConfiguration> options)
     {
+        this.restApiClient = restApiClient;
         config = options.Value;
     }
 
-
-    public async Task CreateStream()
+    public async Task CreateStream(CancellationToken cancellationToken)
     {
-
-        EntityCreationMetadata metadata = new()
+        var  metadata = new EntityCreationMetadata()
         {
-            KafkaTopic = config.Topic,
-            Partitions = 3,
-            Replicas = 3
+            KafkaTopic = config.KafkaTopic,
+            Partitions = 1,
+            Replicas = 1
         };
-
-        var httpClient = new HttpClient()
-        {
-            BaseAddress = new Uri(config.EndPoint!)
-        };
-
-        var httpClientFactory = new HttpClientFactory(httpClient);
-        var restApiClient = new KSqlDbRestApiClient(httpClientFactory);
-
-        var httpResponseMessage = await restApiClient.CreateOrReplaceStreamAsync<Tweet>(metadata);
-        httpResponseMessage.EnsureSuccessStatusCode();
+        var httpResponseMessage = await restApiClient.CreateOrReplaceStreamAsync<Tweet>(metadata, cancellationToken: cancellationToken);
+        Console.WriteLine(httpResponseMessage.ReasonPhrase);
+        //httpResponseMessage.EnsureSuccessStatusCode();
     }
-
-
 }

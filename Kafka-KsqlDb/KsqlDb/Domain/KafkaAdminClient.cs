@@ -85,7 +85,7 @@ public class KafkaAdminClient
     //    {
     //        // Get the list of topics.
     //        var topics = adminClient.GetMetadata(TimeSpan.FromSeconds(10));
-    //        Console.WriteLine($"Topics: {string.Join(", ", topics.Topics.Select(t => t.Topic))}");
+    //        Console.WriteLine($"Topics: {string.Join(", ", topics.Topics.Select(t => t.KafkaTopic))}");
     //    }
     //    catch (Exception ex)
     //    {

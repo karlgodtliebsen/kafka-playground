@@ -10,10 +10,7 @@ public static class KafkaConfigurator
     public static IServiceCollection AddKafka(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<KafkaConfiguration>(configuration.GetSection(KafkaConfiguration.SectionName));
-        //services.AddTransient<KafkaConsumer>();
-        //services.AddTransient<KafkaProducer>();
         services.AddTransient<KafkaAdminClient>();
-        //services.AddTransient<KafkaStreaming>();
         return services;
     }
     

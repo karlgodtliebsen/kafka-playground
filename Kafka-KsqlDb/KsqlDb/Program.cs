@@ -4,22 +4,27 @@ using Microsoft.Extensions.Options;
 
 using KsqlDb.Configuration;
 using KsqlDb.Domain;
+using Microsoft.Extensions.Logging;
 
 //https://github.com/confluentinc/confluent-kafka-dotnet/
 //https://github.com/confluentinc/WikiEdits/blob/master/Program.cs
 
 var builder = Host.CreateApplicationBuilder(args);
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
 builder.Services.AddKafka(builder.Configuration);
 IHost host = builder.Build();
 using (host)
 {
     var configuration = host.Services.GetRequiredService<IOptions<KsqlDbConfiguration>>().Value;
     var admin = host.Services.GetRequiredService<KafkaAdminClient>();
-    await admin.DeleteTopic(configuration.Topic);
-    await admin.CreateTopic(configuration.Topic);
+    await admin.DeleteTopic(configuration.KafkaTopic);
+    await admin.CreateTopic(configuration.KafkaTopic);
 }
 
 builder = Host.CreateApplicationBuilder(args);
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
 builder.Services.AddKafka(builder.Configuration);
 builder.Services.AddKsqlDb(builder.Configuration);
 
@@ -31,7 +36,9 @@ builder.Services.AddKsqlDb(builder.Configuration);
 host = builder.Build();
 using (host)
 {
-    Console.WriteLine("Press any key to exit");
+    //await using var context = host.Services.GetRequiredService<IApplicationKSqlDbContext>();
+    //using var disposable = LatestByOffset(context);
+  Console.WriteLine("Press any key to exit");
     await host.RunAsync();
     Console.ReadLine();
 }
