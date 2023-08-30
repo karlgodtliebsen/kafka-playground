@@ -14,8 +14,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using KsqlDb.DbContext;
 using KsqlDb.Domain.Models;
-using System.Net.Http;
 using IHttpClientFactory = ksqlDB.RestApi.Client.KSql.RestApi.Http.IHttpClientFactory;
+using ksqlDB.RestApi.Client.KSql.RestApi.Statements.Properties;
 
 namespace KsqlDbTests;
 
@@ -64,88 +64,27 @@ public class TestOfKsqlDb
         serviceProvider.GetService<IOptions<KsqlDbConfiguration>>().Should().NotBeNull();
         serviceProvider.GetService<IApplicationKSqlDbContext>().Should().NotBeNull();
         serviceProvider.GetService<IKSqlDbContextFactory>().Should().NotBeNull();
-        serviceProvider.GetService<KsqlDbProcessor>().Should().NotBeNull();
+        serviceProvider.GetService<KsqlDbTweetProcessor>().Should().NotBeNull();
 
         serviceProvider.GetService<IHttpClientFactory>().Should().NotBeNull();
         serviceProvider.GetService<ILoggerFactory>().Should().NotBeNull();
         serviceProvider.GetService<IKSqlDbRestApiClient>().Should().NotBeNull();
     }
 
-    [Fact]
-    public async Task TestOfTweetStreamSubscription()
-    {
-        var factory = serviceProvider.GetRequiredService<IKSqlDbContextFactory>();
-        await using var context = factory.Create((options => options.ShouldPluralizeFromItemName = true));
-        using var subscription = context.CreateQueryStream<Tweet>()
-            .WithOffsetResetPolicy(AutoOffsetReset.Latest)
-            .Where(p => p.Message != "Hello world" || p.Id == 1)
-            .Select(l => new { l.Message, l.Id })
-            .Take(2)
-            .Subscribe(message =>
-            {
-                output.WriteLine($"{nameof(Tweet)}: {message.Id} - {message.Message}");
-            }, error => { output.WriteLine($"Exception: {error.Message}"); }, () => output.WriteLine("Completed"));
-        await Task.Delay(10000);
-        output.WriteLine("done");
-    }
-
-    [Fact]
-    public async Task TestOfUserStreamSubscription()
-    {
-        var factory = serviceProvider.GetRequiredService<IKSqlDbContextFactory>();
-
-        await using var context = factory.Create((options => options.ShouldPluralizeFromItemName = true));
-        using var subscription = context.CreateQueryStream<User>()
-            .WithOffsetResetPolicy(AutoOffsetReset.Latest)
-            .Where(p => p.Gender != "Hello world")
-            .Select(l => new { l.UserId, l.Id, l.Gender, l.RegionId })
-            .Take(2)
-            .Subscribe(message =>
-                {
-                    output.WriteLine($"{nameof(User)}: {message.Id} - {message.UserId} - {message.Gender} - {message.RegionId}");
-                },
-                error => { output.WriteLine($"Exception: {error.Message}"); },
-                () => output.WriteLine("Completed"));
-
-        await Task.Delay(10000);
-        output.WriteLine("done");
-    }
-
-    [Fact]
-    public async Task TestOfPageViewsStreamSubscription()
-    {
-        var factory = serviceProvider.GetRequiredService<IKSqlDbContextFactory>();
-
-        await using var context = factory.Create((options => options.ShouldPluralizeFromItemName = false));
-        using var subscription = context.CreateQueryStream<PageViews>("PAGEVIEWS_STREAM")
-            .WithOffsetResetPolicy(AutoOffsetReset.Latest)
-            .Where(p => p.UserId != "Hello world")
-            .Select(l => new { l.UserId, l.PageId, l.ViewTime })
-            .Take(2)
-            .Subscribe(message =>
-                {
-                    output.WriteLine($"{nameof(PageViews)}: {message.UserId} - {message.UserId} - {message.PageId} - {message.ViewTime}");
-                },
-                error => { output.WriteLine($"Exception: {error.Message}"); },
-                () => output.WriteLine("Completed"));
-
-        await Task.Delay(10000);
-        output.WriteLine("done");
-    }
-
-
     //select * from USERS_TABLE EMIT CHANGES;
 
     [Fact]
-    public async Task TestOfKsqlDbStreamCreation()
+    public async Task TestOfTweetKsqlDbStreamCreation()
     {
         var ksqlDbOptions = serviceProvider.GetRequiredService<IOptions<KsqlDbConfiguration>>().Value;
         output.WriteLine(ksqlDbOptions.KafkaTopic);
         var metadata = new EntityCreationMetadata()
         {
-            KafkaTopic =  ksqlDbOptions.KafkaTopic,
+            KafkaTopic = ksqlDbOptions.KafkaTopic!.ToLowerInvariant(),
             Partitions = 1,
-            Replicas = 1
+            Replicas = 1,
+            EntityName = nameof(Tweet),
+            ShouldPluralizeEntityName = true
         };
         var httpClient = new HttpClient()
         {
@@ -156,30 +95,32 @@ public class TestOfKsqlDb
         var restApiClient = new KSqlDbRestApiClient(httpClientFactory);
         var httpResponseMessage = await restApiClient.CreateOrReplaceStreamAsync<Tweet>(metadata);
         output.WriteLine(httpResponseMessage.ReasonPhrase);
-        //httpResponseMessage.EnsureSuccessStatusCode();
+        httpResponseMessage.EnsureSuccessStatusCode();
     }
 
 
     [Fact]
-    public async Task TestOfKsqlDbStreamCreationUsingConfiguredServices()
+    public async Task TestOfTweetKsqlDbStreamCreationUsingConfiguredServices()
     {
         var ksqlDbOptions = serviceProvider.GetRequiredService<IOptions<KsqlDbConfiguration>>().Value;
         output.WriteLine(ksqlDbOptions.KafkaTopic);
         var metadata = new EntityCreationMetadata()
         {
-            KafkaTopic = ksqlDbOptions.KafkaTopic,
+            KafkaTopic = ksqlDbOptions.KafkaTopic!.ToLowerInvariant(),
             Partitions = 1,
-            Replicas = 1
+            Replicas = 1,
+            EntityName = nameof(Tweet),
+            ShouldPluralizeEntityName = true
         };
         var restApiClient = serviceProvider.GetRequiredService<IKSqlDbRestApiClient>();
 
         var httpResponseMessage = await restApiClient.CreateOrReplaceStreamAsync<Tweet>(metadata, CancellationToken.None);
         output.WriteLine(httpResponseMessage.ReasonPhrase);
-        //httpResponseMessage.EnsureSuccessStatusCode();
+        httpResponseMessage.EnsureSuccessStatusCode();
     }
 
     [Fact]
-    public async Task TestOfStreamCreationUsingAdminClient()
+    public async Task TestOfTweetStreamCreationUsingAdminClient()
     {
         var client = serviceProvider.GetRequiredService<KsqlDbAdminClient>();
         await client.CreateStream(CancellationToken.None);
@@ -187,33 +128,93 @@ public class TestOfKsqlDb
 
 
     [Fact]
-    public async Task TestOfInsertRecord()
+    public async Task TestOfTweetInsertRecords()
     {
         var restApiClient = serviceProvider.GetRequiredService<IKSqlDbRestApiClient>();
+        var insertProperties = new InsertProperties()
+        {
+            EntityName = nameof(Tweet),
+            ShouldPluralizeEntityName = true,
+        };
+        for (int i = 0; i < 100; i++)
+        {
+            var httpResponseMessage = await restApiClient.InsertIntoAsync(new Tweet { Id = 4, Message = "Hello world"+ i.ToString()/*, Amount = 100.0, AccountBalance = 1.0m*/ }, insertProperties, cancellationToken: CancellationToken.None);
+            output.WriteLine(httpResponseMessage.ReasonPhrase);
+            httpResponseMessage.EnsureSuccessStatusCode();
 
-        var httpResponseMessage = await restApiClient.InsertIntoAsync(new Tweet { Id = 1, Message = "Hello world" }, cancellationToken: CancellationToken.None);
-        output.WriteLine(httpResponseMessage.ReasonPhrase);
-        httpResponseMessage.EnsureSuccessStatusCode();
-
-        httpResponseMessage = await restApiClient.InsertIntoAsync(new Tweet { Id = 2, Message = "ksqlDB rulez!" }, cancellationToken: CancellationToken.None);
-        output.WriteLine(httpResponseMessage.ReasonPhrase);
-        httpResponseMessage.EnsureSuccessStatusCode();
+            httpResponseMessage = await restApiClient.InsertIntoAsync(new Tweet { Id = 2, Message = "ksqlDB rulez!" + i.ToString()/*, Amount = 100.0, AccountBalance = 1.0m*/}, insertProperties, cancellationToken: CancellationToken.None);
+            output.WriteLine(httpResponseMessage.ReasonPhrase);
+            httpResponseMessage.EnsureSuccessStatusCode();
+            await Task.Delay(1);
+        }
     }
 
 
     [Fact]
-    public async Task TestOfInsertRecordUsingKSqlDBContext()
+    public async Task TestOfTweetInsertRecordsUsingKSqlDBContext()
     {
         var factory = serviceProvider.GetRequiredService<IKSqlDbContextFactory>();
 
-        await using var context = factory.Create((options => options.ShouldPluralizeFromItemName = true));
+        await using var context = factory.Create(options =>
+        {
+            options.ShouldPluralizeFromItemName = true;
+        });
 
-        context.Add(new Tweet { Id = 1, Message = "Hello world" });
-        context.Add(new Tweet { Id = 2, Message = "ksqlDB rulez!" });
+        context.Add(new Tweet { Id = 10, Message = "Hello world" });
+        context.Add(new Tweet { Id = 20, Message = "ksqlDB rulez!" });
+
         var saveChangesResponse = await context.SaveChangesAsync(cancellationToken: CancellationToken.None);
+
         output.WriteLine(saveChangesResponse.ReasonPhrase);
         saveChangesResponse.EnsureSuccessStatusCode();
         saveChangesResponse.Should().NotBeNull();
+    }
+
+
+    [Fact]
+    public async Task TestOfAddTweetRecordsUsingKSqlDBContext()
+    {
+        var factory = serviceProvider.GetRequiredService<IKSqlDbContextFactory>();
+        var insertProperties = new InsertProperties()
+        {
+            EntityName = nameof(Tweet),
+            ShouldPluralizeEntityName = true,
+        };
+        await using var context = factory.Create(options =>
+        {
+            options.ShouldPluralizeFromItemName = true;
+        });
+
+        var tweet1 = new Tweet { Id = 100, Message = "Hello world" };
+        var tweet2 = new Tweet { Id = 200, Message = "ksqlDB rulez!" };
+        context.Add(tweet1, insertProperties);
+        context.Add(tweet2, insertProperties);
+
+    }
+
+    [Fact]
+    public async Task TestOfTweetStreamSubscription()
+    {
+        var factory = serviceProvider.GetRequiredService<IKSqlDbContextFactory>();
+        await using var context = factory.Create((options =>
+        {
+            options.ShouldPluralizeFromItemName = true;
+        }));
+
+        using var subscription = context.CreateQueryStream<Tweet>()
+            .WithOffsetResetPolicy(AutoOffsetReset.Earliest)
+           // .Where(p => p.Message != "Hello world")
+            .Select(l => new { l.Message, l.Id,l.Amount })
+            .Take(2)
+            .Subscribe(message =>
+                {
+                    output.WriteLine($"{nameof(Tweet)}: {message.Id} - {message.Message} - {message.Amount}");
+                },
+                error => { output.WriteLine($"Exception: {error.Message}"); },
+                () => output.WriteLine("Completed")
+                );
+        await Task.Delay(5000);
+        output.WriteLine("done");
     }
 
 

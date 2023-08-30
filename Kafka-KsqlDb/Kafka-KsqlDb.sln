@@ -7,6 +7,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KsqlDb", "KsqlDb\KsqlDb.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KsqlDbTests", "KsqlDb.Tests\KsqlDbTests.csproj", "{20118E17-D8E0-4A90-BF6C-382CC01D966F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ksqlDB.RestApi.Client", "ksqlDB.RestApi.Client-DotNet\ksqlDb.RestApi.Client\ksqlDB.RestApi.Client.csproj", "{8403FC47-82CD-4663-A66C-6345006B9FDA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{BDD5867E-BF10-410C-8DCF-5DE943C9F532}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ksqlDB.Api.Client.IntegrationTests", "ksqlDB.RestApi.Client-DotNet\Tests\ksqlDB.RestApi.Client.IntegrationTests\ksqlDB.Api.Client.IntegrationTests.csproj", "{71163E07-0338-4ED0-8C3B-21CF6ED45A72}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C6937EE4-B070-4A96-95A3-8D9ADCB4F0CF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "ksqlDB.RestApi.Client-DotNet\Tests\UnitTests\UnitTests.csproj", "{8A0A2096-1D8C-42D9-BDD4-691155F54EE7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,9 +31,27 @@ Global
 		{20118E17-D8E0-4A90-BF6C-382CC01D966F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20118E17-D8E0-4A90-BF6C-382CC01D966F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20118E17-D8E0-4A90-BF6C-382CC01D966F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8403FC47-82CD-4663-A66C-6345006B9FDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8403FC47-82CD-4663-A66C-6345006B9FDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8403FC47-82CD-4663-A66C-6345006B9FDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8403FC47-82CD-4663-A66C-6345006B9FDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71163E07-0338-4ED0-8C3B-21CF6ED45A72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71163E07-0338-4ED0-8C3B-21CF6ED45A72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71163E07-0338-4ED0-8C3B-21CF6ED45A72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71163E07-0338-4ED0-8C3B-21CF6ED45A72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A0A2096-1D8C-42D9-BDD4-691155F54EE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A0A2096-1D8C-42D9-BDD4-691155F54EE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A0A2096-1D8C-42D9-BDD4-691155F54EE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A0A2096-1D8C-42D9-BDD4-691155F54EE7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8403FC47-82CD-4663-A66C-6345006B9FDA} = {BDD5867E-BF10-410C-8DCF-5DE943C9F532}
+		{71163E07-0338-4ED0-8C3B-21CF6ED45A72} = {C6937EE4-B070-4A96-95A3-8D9ADCB4F0CF}
+		{C6937EE4-B070-4A96-95A3-8D9ADCB4F0CF} = {BDD5867E-BF10-410C-8DCF-5DE943C9F532}
+		{8A0A2096-1D8C-42D9-BDD4-691155F54EE7} = {C6937EE4-B070-4A96-95A3-8D9ADCB4F0CF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D83B2424-C1F1-4FAF-B9DA-E1ACE6854ABC}

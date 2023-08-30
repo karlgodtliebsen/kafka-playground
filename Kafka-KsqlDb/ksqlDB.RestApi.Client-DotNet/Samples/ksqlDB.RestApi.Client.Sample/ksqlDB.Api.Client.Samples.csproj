@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+		<LangVersion>10.0</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+        <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+	</PropertyGroup>
+
+	<ItemGroup>
+        <PackageReference Include="ksqlDB.RestApi.Client" Version="3.0.0-rc.2" />
+		<!-- <ProjectReference Include="..\..\ksqlDb.RestApi.Client\ksqlDb.RestApi.Client.csproj" /> -->
+		<PackageReference Include="ksqlDb.RestApi.Client.ProtoBuf" Version="2.0.0-rc.1" />
+		<!-- <ProjectReference Include="..\..\ksqlDb.RestApi.Client.ProtoBuf\ksqlDb.RestApi.Client.ProtoBuf.csproj" /> -->
+
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
+	</ItemGroup>
+
+</Project>

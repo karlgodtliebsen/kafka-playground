@@ -1,10 +1,10 @@
-﻿using KsqlDb.Configuration;
-using ksqlDB.RestApi.Client.KSql.RestApi;
-using ksqlDB.RestApi.Client.KSql.RestApi.Http;
+﻿using ksqlDB.RestApi.Client.KSql.RestApi;
 using ksqlDB.RestApi.Client.KSql.RestApi.Statements;
-using Microsoft.Extensions.Options;
+
+using KsqlDb.Configuration;
 using KsqlDb.Domain.Models;
-using System.Threading;
+
+using Microsoft.Extensions.Options;
 
 namespace KsqlDb.Domain;
 
@@ -21,14 +21,17 @@ public class KsqlDbAdminClient
 
     public async Task CreateStream(CancellationToken cancellationToken)
     {
-        var  metadata = new EntityCreationMetadata()
+        var metadata = new EntityCreationMetadata()
         {
-            KafkaTopic = config.KafkaTopic,
-            Partitions = 1,
-            Replicas = 1
+            KafkaTopic = config.KafkaTopic!.ToLowerInvariant(),
+            Partitions = 1, //TOBEFIXED
+            Replicas = 1, //TOBEFIXED
+            EntityName = nameof(Tweet),
+            ShouldPluralizeEntityName = true
         };
-        var httpResponseMessage = await restApiClient.CreateOrReplaceStreamAsync<Tweet>(metadata, cancellationToken: cancellationToken);
-        Console.WriteLine(httpResponseMessage.ReasonPhrase);
-        //httpResponseMessage.EnsureSuccessStatusCode();
+
+        var httpResponseMessage =
+            await restApiClient.CreateOrReplaceStreamAsync<Tweet>(metadata, cancellationToken: cancellationToken);
+        httpResponseMessage.EnsureSuccessStatusCode();
     }
 }

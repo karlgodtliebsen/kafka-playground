@@ -1,15 +1,16 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using ksqlDb.RestApi.Client.DependencyInjection;
 
-using KsqlDb.Domain;
-using ksqlDb.RestApi.Client.DependencyInjection;
 using ksqlDB.RestApi.Client.KSql.Query.Options;
-using Microsoft.Extensions.Options;
-using KsqlDb.DbContext;
-using KsqlDb.HostServices;
-using ksqlDB.RestApi.Client.KSql.RestApi.Http;
 using ksqlDB.RestApi.Client.KSql.RestApi;
-using Microsoft.Extensions.Logging;
+using ksqlDB.RestApi.Client.KSql.RestApi.Http;
+
+using KsqlDb.DbContext;
+using KsqlDb.Domain;
+using KsqlDb.HostServices;
+
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace KsqlDb.Configuration;
 
@@ -21,7 +22,7 @@ public static class KsqlDbConfigurator
         var config = configuration.GetSection(KsqlDbConfiguration.SectionName).Get<KsqlDbConfiguration>()!;
         services.AddSingleton(Options.Create(config!));
         services.AddTransient<KsqlDbAdminClient>();
-        services.AddTransient<KsqlDbProcessor>();
+        services.AddTransient<KsqlDbTweetProcessor>();
         services.AddHostedService<KsqlDbProcessorService>();
 
         services.AddDbContext<IApplicationKSqlDbContext, ApplicationKSqlDbContext>(
@@ -33,7 +34,7 @@ public static class KsqlDbConfigurator
 
         services.AddDbContextFactory<IApplicationKSqlDbContext>(factoryLifetime: ServiceLifetime.Scoped);
         services.AddTransient<IKSqlDbContextFactory, KSqlDbContextFactory>();
-        
+
         services.AddTransient<ksqlDB.RestApi.Client.KSql.RestApi.Http.IHttpClientFactory>((sp) =>
         {
             var cfg = sp.GetRequiredService<IOptions<KsqlDbConfiguration>>().Value;
@@ -45,14 +46,6 @@ public static class KsqlDbConfigurator
         });
 
         services.AddTransient<IKSqlDbRestApiClient, KSqlDbRestApiClient>();
-
-        //services.AddHttpClient<IKSqlDbRestApiClient, KSqlDbRestApiClient>((sp, client) =>
-        //    {
-        //        var cfg = sp.GetRequiredService<IOptions<KsqlDbConfiguration>>().Value;
-        //        client.BaseAddress = new Uri(cfg.EndPoint!);
-        //    })
-        //    .AddPolicyHandler(HttpClientsPolicies.GetCircuitBreakerPolicyForNotFound())
-        //    .AddPolicyHandler(HttpClientsPolicies.GetRetryPolicy());
         return services;
     }
 }

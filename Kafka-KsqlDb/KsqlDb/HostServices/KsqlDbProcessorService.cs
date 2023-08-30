@@ -5,14 +5,14 @@ namespace KsqlDb.HostServices;
 
 public class KsqlDbProcessorService : BackgroundService
 {
-    private readonly KsqlDbProcessor ksqlDbProcessor;
+    private readonly KsqlDbTweetProcessor ksqlDbTweetProcessor;
 
-    public KsqlDbProcessorService(KsqlDbProcessor ksqlDbProcessor)
+    public KsqlDbProcessorService(KsqlDbTweetProcessor ksqlDbTweetProcessor)
     {
-        this.ksqlDbProcessor = ksqlDbProcessor;
+        this.ksqlDbTweetProcessor = ksqlDbTweetProcessor;
     }
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        await ksqlDbProcessor.Run();
+        await ksqlDbTweetProcessor.Run();
     }
 }

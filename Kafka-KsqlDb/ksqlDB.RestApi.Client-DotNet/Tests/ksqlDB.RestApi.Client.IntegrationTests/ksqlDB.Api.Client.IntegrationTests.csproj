@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+
+		<ImplicitUsings>enable</ImplicitUsings>
+		<LangVersion>10.0</LangVersion>
+		<IsPackable>false</IsPackable>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="FluentAssertions" />
+		<PackageReference Include="Microsoft.Reactive.Testing" />
+		<PackageReference Include="Moq" />
+		<PackageReference Include="NUnit" />
+		<PackageReference Include="NUnit3TestAdapter" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\ksqlDb.RestApi.Client\ksqlDB.RestApi.Client.csproj" />
+		<ProjectReference Include="..\UnitTests\UnitTests.csproj" />
+	</ItemGroup>
+</Project>
