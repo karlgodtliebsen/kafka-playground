@@ -2,8 +2,7 @@
 
 
 Testing integration to 
-Kafka using .Net Clients
-
-skqlDb  using .Net Clients
+> Kafka produce and Consume, and Streaming using .Net Clients
+> skqlDb  using .Net Clients
 
 
