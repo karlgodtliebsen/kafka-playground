@@ -27,6 +27,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{6E46
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InsideOut", "ksqlDB.RestApi.Client-Forked\Samples\InsideOut\InsideOut.csproj", "{6A3CBDA8-92DE-49C9-9932-7311736A3D67}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ksqlDB.Api.Client.Samples", "ksqlDB.RestApi.Client-Forked\Samples\ksqlDB.RestApi.Client.Sample\ksqlDB.Api.Client.Samples.csproj", "{EFEAB35C-CC71-42BB-BC6C-1A23577FF832}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ksqlDB.RestApi.Client.WorkerService", "ksqlDB.RestApi.Client-Forked\Samples\ksqldB.RestApi.Client.WorkerService\ksqlDB.RestApi.Client.WorkerService\ksqlDB.RestApi.Client.WorkerService.csproj", "{D51E5179-DE4B-4483-8D10-80E8C43C483D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Statements", "ksqlDB.RestApi.Client-Forked\Samples\Statements\Statements.csproj", "{0E4A7C94-350A-4CE8-9180-0C3722EB55BC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ksqlDb.RestApi.Client.ProtoBuf", "ksqlDB.RestApi.Client-Forked\ksqlDb.RestApi.Client.ProtoBuf\ksqlDb.RestApi.Client.ProtoBuf.csproj", "{0125C8CD-C516-4713-9B5D-6DD83179199A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +77,22 @@ Global
 		{6A3CBDA8-92DE-49C9-9932-7311736A3D67}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A3CBDA8-92DE-49C9-9932-7311736A3D67}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A3CBDA8-92DE-49C9-9932-7311736A3D67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFEAB35C-CC71-42BB-BC6C-1A23577FF832}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFEAB35C-CC71-42BB-BC6C-1A23577FF832}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFEAB35C-CC71-42BB-BC6C-1A23577FF832}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFEAB35C-CC71-42BB-BC6C-1A23577FF832}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D51E5179-DE4B-4483-8D10-80E8C43C483D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D51E5179-DE4B-4483-8D10-80E8C43C483D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D51E5179-DE4B-4483-8D10-80E8C43C483D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D51E5179-DE4B-4483-8D10-80E8C43C483D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E4A7C94-350A-4CE8-9180-0C3722EB55BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E4A7C94-350A-4CE8-9180-0C3722EB55BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E4A7C94-350A-4CE8-9180-0C3722EB55BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E4A7C94-350A-4CE8-9180-0C3722EB55BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0125C8CD-C516-4713-9B5D-6DD83179199A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0125C8CD-C516-4713-9B5D-6DD83179199A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0125C8CD-C516-4713-9B5D-6DD83179199A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0125C8CD-C516-4713-9B5D-6DD83179199A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +107,10 @@ Global
 		{18AADDE6-65D5-4F41-BFF8-E884F751398B} = {B7A81F14-5E59-4697-B075-2445CE799599}
 		{6E46F213-921B-415F-83B4-58A9D91DF341} = {B7A81F14-5E59-4697-B075-2445CE799599}
 		{6A3CBDA8-92DE-49C9-9932-7311736A3D67} = {6E46F213-921B-415F-83B4-58A9D91DF341}
+		{EFEAB35C-CC71-42BB-BC6C-1A23577FF832} = {6E46F213-921B-415F-83B4-58A9D91DF341}
+		{D51E5179-DE4B-4483-8D10-80E8C43C483D} = {6E46F213-921B-415F-83B4-58A9D91DF341}
+		{0E4A7C94-350A-4CE8-9180-0C3722EB55BC} = {6E46F213-921B-415F-83B4-58A9D91DF341}
+		{0125C8CD-C516-4713-9B5D-6DD83179199A} = {B7A81F14-5E59-4697-B075-2445CE799599}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D83B2424-C1F1-4FAF-B9DA-E1ACE6854ABC}

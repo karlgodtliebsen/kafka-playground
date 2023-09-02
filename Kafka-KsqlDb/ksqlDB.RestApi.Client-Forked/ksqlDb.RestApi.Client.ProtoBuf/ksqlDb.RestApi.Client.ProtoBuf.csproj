@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+		<TargetFrameworks>net7.0</TargetFrameworks>
 		<Authors>Tomas Fabian</Authors>
 		<Company />
 		<PackageLicenseFile></PackageLicenseFile>
@@ -16,18 +16,12 @@
 		<PackageTags>ksql ksqlDB ProtoBuf LINQ .NET csharp push query</PackageTags>
 		<Version>2.0.0</Version>
 		<AssemblyVersion>2.0.0.0</AssemblyVersion>
-		<LangVersion>10.0</LangVersion>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<PackageReleaseNotes>https://github.com/tomasfabian/ksqlDB.RestApi.Client-DotNet/blob/main/ksqlDb.RestApi.Client.ProtoBuf/ChangeLog.md</PackageReleaseNotes>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="ksqlDb.RestApi.Client" Version="3.0.0" />
-		<!-- <ProjectReference Include="..\ksqlDb.RestApi.Client\ksqlDb.RestApi.Client.csproj" /> -->
-		<PackageReference Include="protobuf-net" Version="3.2.0" />
+		<PackageReference Include="protobuf-net" Version="3.2.26" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -35,10 +29,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="..\README.md">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
+	  <ProjectReference Include="..\ksqlDb.RestApi.Client\ksqlDB.RestApi.Client.csproj" />
 	</ItemGroup>
 
 </Project>
