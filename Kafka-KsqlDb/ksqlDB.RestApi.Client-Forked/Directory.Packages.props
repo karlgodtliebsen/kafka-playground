@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
   <ItemGroup Label="EF and configuration Nugets for SqlServer.Connector tests">
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0" />
@@ -9,17 +8,16 @@
     <PackageVersion Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Logging" Version="7.0.0" />
   </ItemGroup>
-  
   <ItemGroup Label="Unit testing Nugets">
-		<PackageVersion Include="FluentAssertions" Version="6.12.0" />
-		<PackageVersion Include="Microsoft.Reactive.Testing" Version="6.0.0" />
-		<PackageVersion Include="Moq" Version="4.20.69" />
-		<PackageVersion Include="MSTest.TestAdapter" Version="3.1.1" />
-		<PackageVersion Include="MSTest.TestFramework" Version="3.1.1" />
-		<PackageVersion Include="NUnit" Version="3.13.3" />
-		<PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
-		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.7.1" />
-		<PackageVersion Include="Ninject.MockingKernel.Moq" Version="3.3.0" />
-		<PackageVersion Include="Joker" Version="2.0.0" />
-	</ItemGroup>
+    <PackageVersion Include="FluentAssertions" Version="6.12.0" />
+    <PackageVersion Include="Microsoft.Reactive.Testing" Version="6.0.0" />
+    <PackageVersion Include="Moq" Version="4.20.69" />
+    <PackageVersion Include="MSTest.TestAdapter" Version="3.1.1" />
+    <PackageVersion Include="MSTest.TestFramework" Version="3.1.1" />
+    <PackageVersion Include="NUnit" Version="3.13.3" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
+    <PackageVersion Include="Ninject.MockingKernel.Moq" Version="3.3.0" />
+    <PackageVersion Include="Joker" Version="2.0.0" />
+  </ItemGroup>
 </Project>

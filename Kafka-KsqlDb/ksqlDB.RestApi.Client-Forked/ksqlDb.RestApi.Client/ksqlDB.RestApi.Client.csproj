@@ -17,21 +17,18 @@
         <PackageTags>ksql ksqlDB LINQ .NET csharp push query</PackageTags>
         <Version>3.2.1</Version>
         <AssemblyVersion>3.2.1.0</AssemblyVersion>
-        <LangVersion>10.0</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
-        <PackageReleaseNotes>https://github.com/tomasfabian/ksqlDB.RestApi.Client-DotNet/blob/main/ksqlDb.RestApi.Client/ChangeLog.md</PackageReleaseNotes>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Confluent.Kafka" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
         <PackageReference Include="System.Interactive.Async" Version="6.0.1" />
         <PackageReference Include="System.Reactive" Version="6.0.0" />
-        <PackageReference Include="System.Text.Json" Version="7.0.0" />
+        <PackageReference Include="System.Text.Json" Version="7.0.3" />
         <PackageReference Include="Pluralize.NET" Version="1.0.2" />
     </ItemGroup>
 

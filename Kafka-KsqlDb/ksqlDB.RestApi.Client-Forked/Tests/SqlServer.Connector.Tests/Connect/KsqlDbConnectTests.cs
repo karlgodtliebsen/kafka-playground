@@ -1,19 +1,27 @@
 using System.Text.Json;
+
 using Confluent.Kafka;
+
 using FluentAssertions;
+
 using InsideOut.Consumer;
+
 using ksqlDB.RestApi.Client.KSql.RestApi.Http;
 using ksqlDB.RestApi.Client.KSql.RestApi.Responses.Connectors;
+
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using SqlServer.Connector.Cdc;
 using SqlServer.Connector.Cdc.Connectors;
 using SqlServer.Connector.Connect;
 using SqlServer.Connector.Tests.Data;
+
 using UnitTests;
+
 using ConfigurationProvider = SqlServer.Connector.Tests.Config.ConfigurationProvider;
 
 namespace SqlServer.Connector.Tests.Connect;
@@ -30,7 +38,7 @@ public class KsqlDbConnectTests : TestBase<KsqlDbConnect>
     ApplicationDbContext = new ApplicationDbContext();
 
     await DropDependenciesAsync(ApplicationDbContext.Database);
-      
+
     await ApplicationDbContext.Database.MigrateAsync();
 
     string connectionString = Configuration.GetConnectionString("DefaultConnection");
@@ -42,7 +50,7 @@ public class KsqlDbConnectTests : TestBase<KsqlDbConnect>
 
   private static readonly IConfiguration Configuration = ConfigurationProvider.CreateConfiguration();
   private static readonly string ConnectorName = "test_connector";
-    
+
   [ClassCleanup]
   public static async Task ClassCleanup()
   {
@@ -52,7 +60,7 @@ public class KsqlDbConnectTests : TestBase<KsqlDbConnect>
   private static async Task DropConnectorAsync()
   {
     var ksqlDbUrl = Configuration["ksqlDb:Url"];
-      
+
     var httpClient = new HttpClient
     {
       BaseAddress = new Uri(ksqlDbUrl)
@@ -61,7 +69,7 @@ public class KsqlDbConnectTests : TestBase<KsqlDbConnect>
     var httpClientFactory = new HttpClientFactory(httpClient);
 
     var ksqlDbConnect = new KsqlDbConnect(httpClientFactory);
-      
+
     await ksqlDbConnect.DropConnectorIfExistsAsync(ConnectorName);
   }
 
@@ -74,7 +82,7 @@ public class KsqlDbConnectTests : TestBase<KsqlDbConnect>
 
     await ApplicationDbContext.Database.EnsureDeletedAsync();
   }
-    
+
   [TestInitialize]
   public override void TestInitialize()
   {
@@ -93,7 +101,7 @@ public class KsqlDbConnectTests : TestBase<KsqlDbConnect>
   }
 
   private static readonly string TableName = "Sensors";
-    
+
   [TestMethod]
   public async Task CreateConnectorAsync_AndReceivesDatabaseChangeObjects()
   {
@@ -131,8 +139,8 @@ public class KsqlDbConnectTests : TestBase<KsqlDbConnect>
 
     await ReceivesDatabaseChangeObjectsAsync(databaseServerName);
   }
-    
-  static readonly IoTSensor Sensor = new() {SensorId = "1-X", Value = 42};
+
+  static readonly IoTSensor Sensor = new() { SensorId = "1-X", Value = 42 };
 
   private static async Task ReceivesDatabaseChangeObjectsAsync(string databaseServerName)
   {
@@ -147,13 +155,13 @@ public class KsqlDbConnectTests : TestBase<KsqlDbConnect>
 
     short expectedItemsCount = 3;
     IList<DatabaseChangeObject<IoTSensor>> receivedSensors = new List<DatabaseChangeObject<IoTSensor>>();
-      
+
     ApplicationDbContext.Sensors.Add(Sensor);
     var saveResult = await ApplicationDbContext.SaveChangesAsync();
 
     ApplicationDbContext.Entry(Sensor).State = EntityState.Detached;
 
-    var updatedSensor = Sensor with {Value = 43};
+    var updatedSensor = Sensor with { Value = 43 };
 
     ApplicationDbContext.Sensors.Update(updatedSensor);
     saveResult = await ApplicationDbContext.SaveChangesAsync();
@@ -163,7 +171,7 @@ public class KsqlDbConnectTests : TestBase<KsqlDbConnect>
 
     //Act
     string topicName = $"{databaseServerName}.dbo.{TableName}";
-      
+
     var kafkaConsumer =
       new KafkaConsumer<string, DatabaseChangeObject<IoTSensor>>(topicName, consumerConfig);
 
@@ -195,13 +203,13 @@ public class KsqlDbConnectTests : TestBase<KsqlDbConnect>
     createOperation.Before.Should().BeNull();
     createOperation.After.Should().NotBeNull();
     createOperation.After.Should().Be(Sensor);
-      
+
     var updateOperation = messages[1];
 
     updateOperation.OperationType.Should().Be(ChangeDataCaptureType.Updated);
     updateOperation.Before.Should().Be(Sensor);
     updateOperation.After.Should().Be(Sensor with { Value = 43 });
-      
+
     var deleteOperation = messages[2];
 
     deleteOperation.OperationType.Should().Be(ChangeDataCaptureType.Deleted);
@@ -222,7 +230,7 @@ public class KsqlDbConnectTests : TestBase<KsqlDbConnect>
     var httpClientFactory = new HttpClientFactory(httpClient);
 
     var ksqlDbConnect = new KsqlDbConnect(httpClientFactory);
-      
+
     var response = await ksqlDbConnect.GetConnectorsAsync();
 
     response.IsSuccessStatusCode.Should().BeTrue();
@@ -250,7 +258,7 @@ public class KsqlDbConnectTests : TestBase<KsqlDbConnect>
 
       var adminClient = adminClientBuilder.Build();
 
-      await adminClient.DeleteTopicsAsync(new[] {topicName});
+      await adminClient.DeleteTopicsAsync(new[] { topicName });
     }
     catch (Exception e)
     {

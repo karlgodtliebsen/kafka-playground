@@ -26,7 +26,7 @@
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.1" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
 		<PackageReference Include="xunit" Version="2.5.0" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.5.0">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -39,7 +39,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\ksqlDB.RestApi.Client-DotNet\ksqlDb.RestApi.Client\ksqlDB.RestApi.Client.csproj" />
+		<ProjectReference Include="..\ksqlDB.RestApi.Client-Forked\ksqlDb.RestApi.Client\ksqlDB.RestApi.Client.csproj" />
 		<ProjectReference Include="..\KsqlDb\KsqlDb.csproj" />
 	</ItemGroup>
 

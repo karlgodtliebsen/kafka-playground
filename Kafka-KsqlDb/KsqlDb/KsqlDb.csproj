@@ -30,7 +30,7 @@
 
 
 	<ItemGroup>
-	  <ProjectReference Include="..\ksqlDB.RestApi.Client-DotNet\ksqlDb.RestApi.Client\ksqlDB.RestApi.Client.csproj" />
+	  <ProjectReference Include="..\ksqlDB.RestApi.Client-Forked\ksqlDb.RestApi.Client\ksqlDB.RestApi.Client.csproj" />
 	</ItemGroup>
 
 </Project>

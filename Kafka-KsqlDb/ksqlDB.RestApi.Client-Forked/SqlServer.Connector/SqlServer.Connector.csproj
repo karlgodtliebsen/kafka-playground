@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net7.0</TargetFrameworks>
+		<Authors>Tomas Fabian</Authors>
+		<PackageLicenseFile>License.txt</PackageLicenseFile>
+		<Copyright>@tomasfabian</Copyright>
+		<Version>1.0.0</Version>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+		<Description>
+			SqlServer.Connector is a client API for consuming row-level table changes (CDC - Change Data Capture) from a Sql Server database with the Debezium connector streaming platform.
+			Targets .NET 7.0.
+		</Description>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+    <ItemGroup>
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.1" />
+	</ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\ksqlDb.RestApi.Client\ksqlDB.RestApi.Client.csproj" />
+    </ItemGroup>
+
+
+</Project>
