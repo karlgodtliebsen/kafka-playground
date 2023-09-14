@@ -7,3 +7,7 @@ Testing integration to
 - Using TestContainers.Net to create docker instances similar to docker-compose for Kafka
 
 
+Coming: 
+KafkaFlow 
+- https://farfetch.github.io/kafkaflow/
+- https://www.infoq.com/articles/kafkaflow-dotnet-framework/?itm_source=infoq&itm_medium=popular_widget&itm_campaign=popular_content_list&itm_content=
