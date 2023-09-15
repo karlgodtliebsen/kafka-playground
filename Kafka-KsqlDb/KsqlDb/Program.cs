@@ -12,7 +12,7 @@ builder.Services.AddKsqlDb(builder.Configuration);
 IHost host = builder.Build();
 using (host)
 {
-    Console.WriteLine("Press any key to exit");
+    Console.WriteLine("Press <Enter> to exit");
     await host.RunAsync();
     Console.ReadLine();
 }

@@ -42,9 +42,6 @@
 	  <None Update="appsettings.IntegrationTests.json">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
-	  <None Update="getting-started.properties">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
 	</ItemGroup>
 
 </Project>

@@ -3,9 +3,13 @@
 
 Includes:
 
+
+
 Usage of Confluent .Net Producer and Consumer in the solution Kafka-simple-producer-consumer
 
-Usage of Copnfluent .Net Stream Client in the solution Kafka-WikiEdit-stream and WikiEditStream.Tests
+Usage of Copnfluent .Net Stream Client in the solution Kafka-WikiEdit-stream WikiEditStream and WikiEditStream.Tests
+This project also includes a TestContainer Setyp for Confluent Docker Compose
+
 
 Usage of Confluent ksqlDb for .net in the solution Kafka-KsqlDb
 

@@ -1,7 +1,8 @@
 ﻿using Confluent.Kafka;
+
 using Microsoft.Extensions.Configuration;
 
-var configFile = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "getting-started.properties"));
+var configFile = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase!, "getting-started.properties"));
 if (!File.Exists(configFile))
 {
     Console.WriteLine($"Failed to find file: {configFile}");
@@ -20,7 +21,8 @@ const string topic = "purchases";
 
 CancellationTokenSource cts = new CancellationTokenSource();
 
-Console.CancelKeyPress += (_, e) => {
+Console.CancelKeyPress += (_, e) =>
+{
     e.Cancel = true; // prevent the process from terminating.
     cts.Cancel();
 };

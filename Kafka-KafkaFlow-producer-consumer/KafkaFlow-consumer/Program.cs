@@ -1,5 +1,6 @@
-﻿using KafkaFlow;
-using KafkaFlow.Producers;
+﻿using Consumer.Configuration;
+
+using KafkaFlow;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,33 +8,33 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-using Producer.Configuration;
-
 using Testcontainers.Kafka;
 
-using KafkaConfiguration = Producer.Configuration.KafkaConfiguration;
+using KafkaConfiguration = Consumer.Configuration.KafkaConfiguration;
 
 
 //https://github.com/Farfetch/kafkaflow/blob/master/samples/KafkaFlow.Sample/Program.cs
 
-var kafkaContainer = new KafkaBuilder().Build();
-await kafkaContainer.StartAsync();
-var kafkaPort = kafkaContainer.GetBootstrapAddress();
-
-
-var configurationBuilder = new ConfigurationBuilder();//
+var configurationBuilder = new ConfigurationBuilder();
 configurationBuilder.AddJsonFile("appsettings.IntegrationTests.json");
 IConfigurationRoot configuration = configurationBuilder.Build();
 
-
-var v = configuration["Kafka:Broker"];
-configuration["Kafka:Broker"] = kafkaPort;
+//https://github.com/Farfetch/kafkaflow/blob/master/samples/KafkaFlow.Sample/Program.cs
+KafkaContainer? kafkaContainer = null;
+//kafkaContainer = new KafkaBuilder().Build();
+if (kafkaContainer is not null)
+{
+    //add to use testContainer
+    await kafkaContainer.StartAsync();
+    var kafkaPort = kafkaContainer.GetBootstrapAddress();
+    configuration["Kafka:Broker"] = kafkaPort;
+}
 
 
 IHostBuilder builder = new HostBuilder();
 builder.ConfigureServices((services) =>
     {
-        services.AddKafka(configuration);
+        services.AddConsumer(configuration);
 
     })
     .ConfigureLogging((hostingContext, logging) =>
@@ -51,22 +52,12 @@ var bus = provider.CreateKafkaBus();
 await bus.StartAsync();
 
 
-var count = 10;
-Console.WriteLine($"Starting Producer with {count} messages");
-
-var producer = provider.GetRequiredService<IProducerAccessor>().GetProducer(config.ProducerName);
-for (var i = 0; i < count; i++)
-{
-    var id = Ulid.NewUlid().ToString(); //var id = Guid.NewGuid().ToString();
-    await producer.ProduceAsync(config.Topic, id, new TestMessage { Text = $"Message: {id}" });
-    Console.WriteLine($"Produced: message with Id {id}");
-}
-
-
-
 Console.WriteLine("Press <Enter> to stop");
 Console.ReadLine();
 await Task.Delay(3000);
 
 
-await kafkaContainer.DisposeAsync();
+if (kafkaContainer is not null)
+{
+    await kafkaContainer.DisposeAsync();
+}

@@ -1,6 +1,8 @@
 ﻿using KafkaFlow;
 using KafkaFlow.TypedHandler;
 
+namespace Consumer;
+
 public class PrintConsoleHandler : IMessageHandler<TestMessage>
 {
     public Task Handle(IMessageContext context, TestMessage message)

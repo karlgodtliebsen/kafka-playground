@@ -1,9 +1,10 @@
 ﻿
 using Confluent.Kafka;
+
 using Microsoft.Extensions.Configuration;
 
 
-var configFile = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,"getting-started.properties"));
+var configFile = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase!, "getting-started.properties"));
 if (!File.Exists(configFile))
 {
     Console.WriteLine($"Failed to find file: {configFile}");
@@ -24,7 +25,7 @@ using var producer = new ProducerBuilder<string, string>(configuration.AsEnumera
 
 var numProduced = 0;
 var rnd = new Random();
-const int numMessages = 10;
+const int numMessages = 10000;
 for (int i = 0; i < numMessages; ++i)
 {
     var user = users[rnd.Next(users.Length)];
@@ -43,6 +44,12 @@ for (int i = 0; i < numMessages; ++i)
                 numProduced += 1;
             }
         });
+
+    if (i % 100 == 0)
+    {
+        producer.Flush(TimeSpan.FromSeconds(10));
+        Task.Delay(1000).Wait();
+    }
 }
 
 producer.Flush(TimeSpan.FromSeconds(10));
