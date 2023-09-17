@@ -10,6 +10,7 @@ public class Tweet : Record
     [JsonPropertyName("Id")]
     public int Id { get; set; }
 
+    
     [JsonPropertyName("MESSAGE")]
     public string Message { get; set; } = null!;
 
@@ -19,7 +20,6 @@ public class Tweet : Record
 
     [JsonPropertyName("AMOUNT")] 
     public double Amount { get; set; } = 42.0;
-
 
     //[JsonPropertyName("ACCOUNTBALANCE")]
     //[Decimal(3, 2)]

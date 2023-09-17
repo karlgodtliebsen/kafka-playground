@@ -25,7 +25,7 @@ public class TestOfKsqlDb
     }
 
     [Fact]
-    public async Task TestOfConfluentKafkaSetup()
+    public async Task TestOfksqlDb()
     {
         var ksqlDbUrl = @"http://localhost:8088";
 

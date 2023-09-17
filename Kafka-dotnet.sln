@@ -58,6 +58,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DDE6D3D4-C3AB-4E8B-B288-FC83FE6A5538}"
 	ProjectSection(SolutionItems) = preProject
 		docker-compose-kafkaFlow.yml = docker-compose-kafkaFlow.yml
+		docker-compose-ksqldb-rest.yml = docker-compose-ksqldb-rest.yml
 		docker-compose.yml = docker-compose.yml
 		README.md = README.md
 	EndProjectSection

@@ -17,12 +17,12 @@ using IHttpClientFactory = ksqlDB.RestApi.Client.KSql.RestApi.Http.IHttpClientFa
 namespace KsqlDbTests;
 
 //https://github.com/tomasfabian/ksqlDB.RestApi.Client-DotNet
-public class KafkaTestOffUserKsqlDb
+public class TestOfKafkaksqlDbUsage
 {
     private readonly ITestOutputHelper output;
     private readonly IHost host;
     private readonly IServiceProvider serviceProvider;
-    public KafkaTestOffUserKsqlDb(ITestOutputHelper output)
+    public TestOfKafkaksqlDbUsage(ITestOutputHelper output)
     {
         this.output = output;
 
@@ -37,7 +37,7 @@ public class KafkaTestOffUserKsqlDb
             services.AddKsqlDb(configuration);
 
         })
-        .ConfigureLogging((hostingContext, logging) =>
+        .ConfigureLogging((_, logging) =>
         {
             logging.AddConsole();
             logging.AddDebug();
@@ -53,7 +53,7 @@ public class KafkaTestOffUserKsqlDb
     {
         var ksqlDbOptions = serviceProvider.GetRequiredService<IOptions<KsqlDbConfiguration>>().Value;
         ksqlDbOptions.EndPoint.Should().Be("http://localhost:8088");
-        ksqlDbOptions.KafkaTopic.Should().Be("tweet");
+        ksqlDbOptions.KafkaTopic.Should().Be("tweets");
     }
     [Fact]
     public void VerifyConfiguration()
@@ -62,13 +62,12 @@ public class KafkaTestOffUserKsqlDb
         serviceProvider.GetService<IApplicationKSqlDbContext>().Should().NotBeNull();
         serviceProvider.GetService<IKSqlDbContextFactory>().Should().NotBeNull();
         serviceProvider.GetService<KsqlDbTweetProcessor>().Should().NotBeNull();
-
         serviceProvider.GetService<IHttpClientFactory>().Should().NotBeNull();
         serviceProvider.GetService<ILoggerFactory>().Should().NotBeNull();
         serviceProvider.GetService<IKSqlDbRestApiClient>().Should().NotBeNull();
     }
 
-    [Fact]
+    [Fact(Skip="Must create User stream before usage")]
     public async Task TestOfUserStreamSubscription()
     {
         var factory = serviceProvider.GetRequiredService<IKSqlDbContextFactory>();
@@ -89,8 +88,4 @@ public class KafkaTestOffUserKsqlDb
         await Task.Delay(10000);
         output.WriteLine("done");
     }
-    
-    //select * from USERS_TABLE EMIT CHANGES;
-    
-
 }

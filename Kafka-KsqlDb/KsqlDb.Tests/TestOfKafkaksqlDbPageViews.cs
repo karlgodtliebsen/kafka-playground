@@ -1,31 +1,32 @@
-using KsqlDb.Domain;
-using ksqlDB.RestApi.Client.KSql.Linq;
-using ksqlDB.RestApi.Client.KSql.Query.Options;
-using ksqlDB.RestApi.Client.KSql.RestApi;
-using ksqlDB.RestApi.Client.KSql.RestApi.Http;
-using ksqlDB.RestApi.Client.KSql.RestApi.Statements;
-using Xunit.Abstractions;
-using FluentAssertions;
-using KsqlDb.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Xunit.Abstractions;
+using FluentAssertions;
+
+using KsqlDb.Domain;
+using ksqlDB.RestApi.Client.KSql.Linq;
+using ksqlDB.RestApi.Client.KSql.Query.Options;
+using ksqlDB.RestApi.Client.KSql.RestApi;
+using ksqlDB.RestApi.Client.KSql.RestApi.Statements;
+using KsqlDb.Configuration;
 using KsqlDb.DbContext;
 using KsqlDb.Domain.Models;
-using IHttpClientFactory = ksqlDB.RestApi.Client.KSql.RestApi.Http.IHttpClientFactory;
 using ksqlDB.RestApi.Client.KSql.RestApi.Statements.Properties;
+using IHttpClientFactory = ksqlDB.RestApi.Client.KSql.RestApi.Http.IHttpClientFactory;
+
 
 namespace KsqlDbTests;
 
 //https://github.com/tomasfabian/ksqlDB.RestApi.Client-DotNet
-public class KafkaTestOfPageViewsKsqlDb
+public class TestOfKafkaksqlDbPageViews
 {
     private readonly ITestOutputHelper output;
     private readonly IHost host;
     private readonly IServiceProvider serviceProvider;
-    public KafkaTestOfPageViewsKsqlDb(ITestOutputHelper output)
+    public TestOfKafkaksqlDbPageViews(ITestOutputHelper output)
     {
         this.output = output;
 
@@ -56,8 +57,9 @@ public class KafkaTestOfPageViewsKsqlDb
     {
         var ksqlDbOptions = serviceProvider.GetRequiredService<IOptions<KsqlDbConfiguration>>().Value;
         ksqlDbOptions.EndPoint.Should().Be("http://localhost:8088");
-        ksqlDbOptions.KafkaTopic.Should().Be("tweet");
+        ksqlDbOptions.KafkaTopic.Should().Be("tweets");
     }
+
     [Fact]
     public void VerifyConfiguration()
     {
@@ -66,8 +68,8 @@ public class KafkaTestOfPageViewsKsqlDb
         serviceProvider.GetService<IKSqlDbContextFactory>().Should().NotBeNull();
         serviceProvider.GetService<KsqlDbTweetProcessor>().Should().NotBeNull();
 
-        serviceProvider.GetService<IHttpClientFactory>().Should().NotBeNull();
         serviceProvider.GetService<ILoggerFactory>().Should().NotBeNull();
+        serviceProvider.GetService<IHttpClientFactory>().Should().NotBeNull();
         serviceProvider.GetService<IKSqlDbRestApiClient>().Should().NotBeNull();
     }
 
@@ -115,7 +117,7 @@ public class KafkaTestOfPageViewsKsqlDb
         httpResponseMessage.EnsureSuccessStatusCode();
     }
 
-    /*
+
 
     [Fact]
     public async Task TestOfInsertRecord()
@@ -128,11 +130,11 @@ public class KafkaTestOfPageViewsKsqlDb
         };
         for (int i = 0; i < 100; i++)
         {
-            var httpResponseMessage = await restApiClient.InsertIntoAsync(new Tweet { Id = 4, Message = "Hello world"+ i.ToString() }, insertProperties, cancellationToken: CancellationToken.None);
+            var httpResponseMessage = await restApiClient.InsertIntoAsync(new Tweet { Id = 4, Message = "Hello world" + i.ToString() }, insertProperties, cancellationToken: CancellationToken.None);
             output.WriteLine(httpResponseMessage.ReasonPhrase);
             httpResponseMessage.EnsureSuccessStatusCode();
 
-            httpResponseMessage = await restApiClient.InsertIntoAsync(new Tweet { Id = 2, Message = "ksqlDB rulez!" + i.ToString()/}, insertProperties, cancellationToken: CancellationToken.None);
+            httpResponseMessage = await restApiClient.InsertIntoAsync(new Tweet { Id = 2, Message = "ksqlDB rulez!" + i.ToString() }, insertProperties, cancellationToken: CancellationToken.None);
             output.WriteLine(httpResponseMessage.ReasonPhrase);
             httpResponseMessage.EnsureSuccessStatusCode();
             await Task.Delay(1);
@@ -150,8 +152,12 @@ public class KafkaTestOfPageViewsKsqlDb
             options.ShouldPluralizeFromItemName = true;
         });
 
-        context.Add(new Tweet { Id = 10, Message = "Hello world" });
-        context.Add(new Tweet { Id = 20, Message = "ksqlDB rulez!" });
+        int limit = 100;
+        for (int i = 0; i < limit; i++)
+        {
+            context.Add(new Tweet { Id = limit + i, Message = "Hello world" });
+            context.Add(new Tweet { Id = limit * 2 + i, Message = "ksqlDB rulez!" });
+        }
 
         var saveChangesResponse = await context.SaveChangesAsync(cancellationToken: CancellationToken.None);
 
@@ -160,6 +166,35 @@ public class KafkaTestOfPageViewsKsqlDb
         saveChangesResponse.Should().NotBeNull();
     }
 
+    [Fact]
+    public async Task TestOfInsertRecordsWithSameIdUsingKSqlDBContext()
+    {
+        var factory = serviceProvider.GetRequiredService<IKSqlDbContextFactory>();
+
+        await using var context = factory.Create(options =>
+        {
+            options.ShouldPluralizeFromItemName = true;
+        });
+
+
+        int id1 = 42424242;
+        int id2 = 43434343;
+
+        int limit = 100;
+        for (int i = 0; i < limit; i++)
+        {
+            var mid1 = Ulid.NewUlid().ToString();
+            var mid2 = Ulid.NewUlid().ToString();
+            context.Add(new Tweet { Id = id1, Message = $"Hello world   - {mid1}" });
+            context.Add(new Tweet { Id = id2, Message = $"ksqlDB rulez! - {mid2}" });
+        }
+
+        var saveChangesResponse = await context.SaveChangesAsync(cancellationToken: CancellationToken.None);
+
+        output.WriteLine(saveChangesResponse.ReasonPhrase);
+        saveChangesResponse.EnsureSuccessStatusCode();
+        saveChangesResponse.Should().NotBeNull();
+    }
 
     [Fact]
     public async Task TestOfAddRecordUsingKSqlDBContext()
@@ -193,8 +228,7 @@ public class KafkaTestOfPageViewsKsqlDb
 
         using var subscription = context.CreateQueryStream<Tweet>()
             .WithOffsetResetPolicy(AutoOffsetReset.Earliest)
-           // .Where(p => p.Message != "Hello world")
-            .Select(l => new { l.Message, l.Id,l.Amount })
+            .Select(l => new { l.Message, l.Id, l.Amount })
             .Take(2)
             .Subscribe(message =>
                 {
@@ -206,5 +240,5 @@ public class KafkaTestOfPageViewsKsqlDb
         await Task.Delay(5000);
         output.WriteLine("done");
     }
-    */
+
 }

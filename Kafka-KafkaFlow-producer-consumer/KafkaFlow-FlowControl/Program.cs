@@ -17,10 +17,9 @@ IConfigurationRoot configuration = configurationBuilder.Build();
 
 //https://github.com/Farfetch/kafkaflow/blob/master/samples/KafkaFlow.Sample/Program.cs
 KafkaContainer? kafkaContainer = null;
-//kafkaContainer = new KafkaBuilder().Build();
-if (kafkaContainer is not null)
+// kafkaContainer = new KafkaBuilder().Build();
+if (kafkaContainer is not null)    //use testContainer
 {
-    //use testContainer
     await kafkaContainer.StartAsync();
     var kafkaPort = kafkaContainer.GetBootstrapAddress();
     configuration["Kafka:Broker"] = kafkaPort;

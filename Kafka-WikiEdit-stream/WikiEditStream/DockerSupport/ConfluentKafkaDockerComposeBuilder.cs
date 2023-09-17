@@ -8,7 +8,7 @@ using System.Text;
 
 using WikiEditStream.Configuration;
 
-namespace WikiEditStream;
+namespace WikiEditStream.DockerSupport;
 
 public sealed class ConfluentKafkaDockerComposeBuilder : IAsyncDisposable
 {
@@ -100,19 +100,20 @@ public sealed class ConfluentKafkaDockerComposeBuilder : IAsyncDisposable
 
     private void AdaptConfiguration()
     {
-        this.config.BootstrapServers = $"localhost:{BrokerPlainTextPort}";
+        config.BootstrapServers = $"localhost:{BrokerPlainTextPort}";
     }
 
-    public async Task BuildConfluentDocker()
+    ////The builder also starts the containers in order to get port mappings
+    public async Task BuildAndStartConfluentDocker()
     {
-        var brokerName = "broker";
-        var schemaRegistryName = "schemaRegistry";
-        var connectName = "connect";
-        var ksqlDbServerName = "ksqldb-server";
-        var controlCenterName = "control-center";
-        var ksqlClientName = "ksqldb-cli";
-        var ksqlDataGenName = "ksql-datagen";
-        var restProxyName = "rest-proxy";
+        var brokerContainerName = "broker-testcontainer";
+        var schemaRegistryContainerName = "schemaRegistry-testcontainer";
+        var connectContainerName = "connect-testcontainer";
+        var ksqlDbServerContainerName = "ksqldb-server-testcontainer";
+        var controlCenterContainerName = "control-center-testcontainer";
+        var ksqlClientContainerName = "ksqldb-cli-testcontainer";
+        var ksqlDataGenContainerName = "ksql-datagen-testcontainer";
+        var restProxyContainerName = "rest-proxy-testcontainer";
 
         const int brokerPort = 29092;
         const int brokerQuorumPort = 29093;
@@ -123,15 +124,15 @@ public sealed class ConfluentKafkaDockerComposeBuilder : IAsyncDisposable
             .Build();
 
         brokerContainer = new ContainerBuilder()
-            .WithHostname(brokerName)
-            .WithName(brokerName)
+            .WithHostname(brokerContainerName)
+            .WithName(brokerContainerName)
             .WithImage("confluentinc/cp-kafka:7.4.1")
             .WithPortBinding(BrokerPlainTextPort, BrokerPlainTextPort)      //Default 9092
             .WithPortBinding(BrokerJmxPort, BrokerJmxPort)                  //Default 9101
             .WithNetwork(network)
             .WithEnvironment("KAFKA_NODE_ID", "1")
             .WithEnvironment("KAFKA_LISTENER_SECURITY_PROTOCOL_MAP", "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT")
-            .WithEnvironment("KAFKA_ADVERTISED_LISTENERS", $"PLAINTEXT://{brokerName}:{brokerPort},PLAINTEXT_HOST://localhost:{BrokerPlainTextPort}")
+            .WithEnvironment("KAFKA_ADVERTISED_LISTENERS", $"PLAINTEXT://{brokerContainerName}:{brokerPort},PLAINTEXT_HOST://localhost:{BrokerPlainTextPort}")
             .WithEnvironment("KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR", "1")
             .WithEnvironment("KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS", "0")
             .WithEnvironment("KAFKA_TRANSACTION_STATE_LOG_MIN_ISR", "1")
@@ -139,8 +140,8 @@ public sealed class ConfluentKafkaDockerComposeBuilder : IAsyncDisposable
             .WithEnvironment("KAFKA_JMX_PORT", $"{BrokerJmxPort}")
             .WithEnvironment("KAFKA_JMX_HOSTNAME", "localhost")
             .WithEnvironment("KAFKA_PROCESS_ROLES", "broker,controller")
-            .WithEnvironment("KAFKA_CONTROLLER_QUORUM_VOTERS", $"1@{brokerName}:{brokerQuorumPort}")
-            .WithEnvironment("KAFKA_LISTENERS", $"PLAINTEXT://{brokerName}:{brokerPort},CONTROLLER://{brokerName}:{brokerQuorumPort},PLAINTEXT_HOST://0.0.0.0:{BrokerPlainTextPort}")
+            .WithEnvironment("KAFKA_CONTROLLER_QUORUM_VOTERS", $"1@{brokerContainerName}:{brokerQuorumPort}")
+            .WithEnvironment("KAFKA_LISTENERS", $"PLAINTEXT://{brokerContainerName}:{brokerPort},CONTROLLER://{brokerContainerName}:{brokerQuorumPort},PLAINTEXT_HOST://0.0.0.0:{BrokerPlainTextPort}")
             .WithEnvironment("KAFKA_INTER_BROKER_LISTENER_NAME", "PLAINTEXT")
             .WithEnvironment("KAFKA_CONTROLLER_LISTENER_NAMES", "CONTROLLER")
             .WithEnvironment("KAFKA_LOG_DIRS", "/tmp/kraft-combined-logs")
@@ -154,14 +155,14 @@ public sealed class ConfluentKafkaDockerComposeBuilder : IAsyncDisposable
 
 
         schemaRegistryContainer = new ContainerBuilder()
-            .WithHostname(schemaRegistryName)
-            .WithName(schemaRegistryName)
+            .WithHostname(schemaRegistryContainerName)
+            .WithName(schemaRegistryContainerName)
             .WithImage("confluentinc/cp-schema-registry:7.4.1")
             .WithNetwork(network)
             .WithPortBinding(SchemaRegistryPort, SchemaRegistryPort)
             .DependsOn(brokerContainer)
-            .WithEnvironment("SCHEMA_REGISTRY_HOST_NAME", schemaRegistryName)
-            .WithEnvironment("SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS", $"{brokerName}:{brokerPort}")
+            .WithEnvironment("SCHEMA_REGISTRY_HOST_NAME", schemaRegistryContainerName)
+            .WithEnvironment("SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS", $"{brokerContainerName}:{brokerPort}")
             .WithEnvironment("SCHEMA_REGISTRY_LISTENERS", $"http://0.0.0.0:{SchemaRegistryPort}")
             .Build();
 
@@ -169,15 +170,15 @@ public sealed class ConfluentKafkaDockerComposeBuilder : IAsyncDisposable
         SchemaRegistryPort = schemaRegistryContainer.GetMappedPublicPort(SchemaRegistryPort);
 
         connectContainer = new ContainerBuilder()
-            .WithHostname(connectName)
-            .WithName(connectName)
+            .WithHostname(connectContainerName)
+            .WithName(connectContainerName)
             .WithImage("cnfldemos/cp-server-connect-datagen:0.5.3-7.1.0")
             .WithNetwork(network)
             .WithPortBinding(ConnectPort, ConnectPort)
             .DependsOn(brokerContainer)
             .DependsOn(schemaRegistryContainer)
-            .WithEnvironment("CONNECT_BOOTSTRAP_SERVERS", $"{brokerName}:{brokerPort}")
-            .WithEnvironment("CONNECT_REST_ADVERTISED_HOST_NAME", connectName)
+            .WithEnvironment("CONNECT_BOOTSTRAP_SERVERS", $"{brokerContainerName}:{brokerPort}")
+            .WithEnvironment("CONNECT_REST_ADVERTISED_HOST_NAME", connectContainerName)
             .WithEnvironment("CONNECT_GROUP_ID", "compose-connect-group")
             .WithEnvironment("CONNECT_CONFIG_STORAGE_TOPIC", "docker-connect-configs")
             .WithEnvironment("CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR", "1")
@@ -188,7 +189,7 @@ public sealed class ConfluentKafkaDockerComposeBuilder : IAsyncDisposable
             .WithEnvironment("CONNECT_STATUS_STORAGE_REPLICATION_FACTOR", "1")
             .WithEnvironment("CONNECT_KEY_CONVERTER", "org.apache.kafka.connect.storage.StringConverter")
             .WithEnvironment("CONNECT_VALUE_CONVERTER", "io.confluent.connect.avro.AvroConverter")
-            .WithEnvironment("CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL", $"http://{schemaRegistryName}:{SchemaRegistryPort}")
+            .WithEnvironment("CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL", $"http://{schemaRegistryContainerName}:{SchemaRegistryPort}")
             .WithEnvironment("CLASSPATH", "/usr/share/java/monitoring-interceptors/monitoring-interceptors-7.4.1.jar")
             .WithEnvironment("CONNECT_PRODUCER_INTERCEPTOR_CLASSES", "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor")
             .WithEnvironment("CONNECT_CONSUMER_INTERCEPTOR_CLASSES", "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor")
@@ -200,22 +201,22 @@ public sealed class ConfluentKafkaDockerComposeBuilder : IAsyncDisposable
         ConnectPort = connectContainer.GetMappedPublicPort(ConnectPort);
 
         ksqlDbServerContainer = new ContainerBuilder()
-            .WithHostname(ksqlDbServerName)
-            .WithName(ksqlDbServerName)
+            .WithHostname(ksqlDbServerContainerName)
+            .WithName(ksqlDbServerContainerName)
             .WithImage("confluentinc/cp-ksqldb-server:7.4.1")
             .WithNetwork(network)
             .WithPortBinding(KsqlDbPort, KsqlDbPort)
             .DependsOn(brokerContainer)
             .DependsOn(connectContainer)
             .WithEnvironment("KSQL_CONFIG_DIR", "/etc/ksql")
-            .WithEnvironment("KSQL_BOOTSTRAP_SERVERS", $"{brokerName}:{brokerPort}")
-            .WithEnvironment("KSQL_HOST_NAME", $"{ksqlDbServerName}")
+            .WithEnvironment("KSQL_BOOTSTRAP_SERVERS", $"{brokerContainerName}:{brokerPort}")
+            .WithEnvironment("KSQL_HOST_NAME", $"{ksqlDbServerContainerName}")
             .WithEnvironment("KSQL_LISTENERS", $"http://0.0.0.0:{KsqlDbPort}")
             .WithEnvironment("KSQL_CACHE_MAX_BYTES_BUFFERING", "0")
-            .WithEnvironment("KSQL_KSQL_SCHEMA_REGISTRY_URL", $"http://{schemaRegistryName}:{SchemaRegistryPort}")
+            .WithEnvironment("KSQL_KSQL_SCHEMA_REGISTRY_URL", $"http://{schemaRegistryContainerName}:{SchemaRegistryPort}")
             .WithEnvironment("KSQL_PRODUCER_INTERCEPTOR_CLASSES", "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor")
             .WithEnvironment("KSQL_CONSUMER_INTERCEPTOR_CLASSES", "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor")
-            .WithEnvironment("KSQL_KSQL_CONNECT_URL", $"http://{connectName}:{ConnectPort}")
+            .WithEnvironment("KSQL_KSQL_CONNECT_URL", $"http://{connectContainerName}:{ConnectPort}")
             .WithEnvironment("KSQL_KSQL_LOGGING_PROCESSING_TOPIC_REPLICATION_FACTOR", "1")
             .WithEnvironment("KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE", "true")
             .WithEnvironment("KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE", "true")
@@ -226,19 +227,19 @@ public sealed class ConfluentKafkaDockerComposeBuilder : IAsyncDisposable
 
         controlCenterContainer = new ContainerBuilder()
             .WithImage("confluentinc/cp-enterprise-control-center:7.4.1")
-            .WithHostname(controlCenterName)
-            .WithName(controlCenterName)
+            .WithHostname(controlCenterContainerName)
+            .WithName(controlCenterContainerName)
             .WithNetwork(network)
             .WithPortBinding(ControlCenterPort, ControlCenterPort)
             .DependsOn(brokerContainer)
             .DependsOn(schemaRegistryContainer)
             .DependsOn(connectContainer)
             .DependsOn(ksqlDbServerContainer)
-            .WithEnvironment("CONTROL_CENTER_BOOTSTRAP_SERVERS", $"{brokerName}:{brokerPort}")
-            .WithEnvironment("CONTROL_CENTER_CONNECT_CONNECT-DEFAULT_CLUSTER", $"{connectName}:{ConnectPort}")
-            .WithEnvironment("CONTROL_CENTER_KSQL_KSQLDB1_URL", $"http://{ksqlDbServerName}:{KsqlDbPort}")
+            .WithEnvironment("CONTROL_CENTER_BOOTSTRAP_SERVERS", $"{brokerContainerName}:{brokerPort}")
+            .WithEnvironment("CONTROL_CENTER_CONNECT_CONNECT-DEFAULT_CLUSTER", $"{connectContainerName}:{ConnectPort}")
+            .WithEnvironment("CONTROL_CENTER_KSQL_KSQLDB1_URL", $"http://{ksqlDbServerContainerName}:{KsqlDbPort}")
             .WithEnvironment("CONTROL_CENTER_KSQL_KSQLDB1_ADVERTISED_URL", $"http://localhost:{KsqlDbPort}")
-            .WithEnvironment("CONTROL_CENTER_SCHEMA_REGISTRY_URL", $"http://{schemaRegistryName}:{SchemaRegistryPort}")
+            .WithEnvironment("CONTROL_CENTER_SCHEMA_REGISTRY_URL", $"http://{schemaRegistryContainerName}:{SchemaRegistryPort}")
             .WithEnvironment("CONTROL_CENTER_REPLICATION_FACTOR", "1")
             .WithEnvironment("CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS", "1")
             .WithEnvironment("CONTROL_CENTER_MONITORING_INTERCEPTOR_TOPIC_PARTITIONS", "1")
@@ -250,8 +251,8 @@ public sealed class ConfluentKafkaDockerComposeBuilder : IAsyncDisposable
 
         ksqlClientContainer = new ContainerBuilder()
             .WithImage("confluentinc/cp-ksqldb-cli:7.4.1")
-            .WithHostname(ksqlClientName)
-            .WithName(ksqlClientName)
+            .WithHostname(ksqlClientContainerName)
+            .WithName(ksqlClientContainerName)
             .WithNetwork(network)
             .DependsOn(brokerContainer)
             .DependsOn(connectContainer)
@@ -274,8 +275,8 @@ public sealed class ConfluentKafkaDockerComposeBuilder : IAsyncDisposable
         string bashCommand = $"""bash -c 'echo Waiting for Kafka to be ready... && sleep 11'""";
 
         ksqlDataGenContainer = new ContainerBuilder()
-            .WithHostname(ksqlDataGenName)
-            .WithName(ksqlDataGenName)
+            .WithHostname(ksqlDataGenContainerName)
+            .WithName(ksqlDataGenContainerName)
             .WithImage("confluentinc/ksqldb-examples:7.4.1")
             .WithNetwork(network)
             .DependsOn(ksqlDbServerContainer)
@@ -284,8 +285,8 @@ public sealed class ConfluentKafkaDockerComposeBuilder : IAsyncDisposable
             .DependsOn(connectContainer)
             //.WithCommand(bashCommand)
             .WithEnvironment("KSQL_CONFIG_DIR", "/etc/ksql")
-            .WithEnvironment("STREAMS_BOOTSTRAP_SERVERS", $"{brokerName}:{brokerPort}")
-            .WithEnvironment("STREAMS_SCHEMA_REGISTRY_HOST", $"{schemaRegistryName}")
+            .WithEnvironment("STREAMS_BOOTSTRAP_SERVERS", $"{brokerContainerName}:{brokerPort}")
+            .WithEnvironment("STREAMS_SCHEMA_REGISTRY_HOST", $"{schemaRegistryContainerName}")
             .WithEnvironment("STREAMS_SCHEMA_REGISTRY_PORT", $"{SchemaRegistryPort}")
             .Build();
 
@@ -294,16 +295,16 @@ public sealed class ConfluentKafkaDockerComposeBuilder : IAsyncDisposable
 
         restProxyContainer = new ContainerBuilder()
             .WithImage("confluentinc/cp-kafka-rest:7.4.1")
-            .WithHostname(restProxyName)
-            .WithName(restProxyName)
+            .WithHostname(restProxyContainerName)
+            .WithName(restProxyContainerName)
             .WithPortBinding(KafkaRestPort, KafkaRestPort)
             .WithNetwork(network)
             .DependsOn(brokerContainer)
             .DependsOn(schemaRegistryContainer)
-            .WithEnvironment("KAFKA_REST_HOST_NAME", restProxyName)
-            .WithEnvironment("KAFKA_REST_BOOTSTRAP_SERVERS", $"{brokerName}:{brokerPort}")
+            .WithEnvironment("KAFKA_REST_HOST_NAME", restProxyContainerName)
+            .WithEnvironment("KAFKA_REST_BOOTSTRAP_SERVERS", $"{brokerContainerName}:{brokerPort}")
             .WithEnvironment("KAFKA_REST_LISTENERS", $"http://0.0.0.0:{KafkaRestPort}")
-            .WithEnvironment("KAFKA_REST_SCHEMA_REGISTRY_URL", $"http://{schemaRegistryName}:{SchemaRegistryPort}")
+            .WithEnvironment("KAFKA_REST_SCHEMA_REGISTRY_URL", $"http://{schemaRegistryContainerName}:{SchemaRegistryPort}")
             .Build();
 
         await restProxyContainer!.StartAsync().ConfigureAwait(false);

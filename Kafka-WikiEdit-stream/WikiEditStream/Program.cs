@@ -25,9 +25,11 @@ using (host)
 
 builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddKafka(builder.Configuration);
+
+//
 builder.Services.AddKafkaProducerHosts(builder.Configuration);
 //builder.Services.AddKafkaConsumerHosts(builder.Configuration);
-builder.Services.AddKafkaStreamingHosts(builder.Configuration);
+//builder.Services.AddKafkaStreamingHosts(builder.Configuration);
 
 
 host = builder.Build();
