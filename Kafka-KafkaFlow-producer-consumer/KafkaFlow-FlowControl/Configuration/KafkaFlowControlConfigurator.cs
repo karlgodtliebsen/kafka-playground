@@ -6,9 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FlowControl.Configuration;
 
-public static class KafkaConfigurator
+public static class KafkaFlowControlConfigurator
 {
-    public static IServiceCollection AddProducer(this IServiceCollection services, IConfigurationRoot configuration, string? sectionName = null)
+    public static IServiceCollection AddFlowControl(this IServiceCollection services, IConfigurationRoot configuration, string? sectionName = null)
     {
 
         sectionName = sectionName ?? KafkaFlowConfiguration.SectionName;

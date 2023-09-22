@@ -30,7 +30,7 @@ if (kafkaContainer is not null)
 IHostBuilder builder = new HostBuilder();
 builder.ConfigureServices((services) =>
     {
-        services.AddProducer(configuration);
+        services.AddFlowControl(configuration);
 
     })
     .ConfigureLogging((hostingContext, logging) =>
