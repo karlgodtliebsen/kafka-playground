@@ -2,7 +2,6 @@
 using ksqlDB.RestApi.Client.KSql.Query.Context;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace KsqlDb.DbContext;
 

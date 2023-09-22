@@ -56,8 +56,9 @@ public class TestOfKsqlDb
     {
         var ksqlDbOptions = serviceProvider.GetRequiredService<IOptions<KsqlDbConfiguration>>().Value;
         ksqlDbOptions.EndPoint.Should().Be("http://localhost:8088");
-        ksqlDbOptions.KafkaTopic.Should().Be("tweet");
+        ksqlDbOptions.KafkaTopic.Should().Be("tweets");
     }
+
     [Fact]
     public void VerifyConfiguration()
     {

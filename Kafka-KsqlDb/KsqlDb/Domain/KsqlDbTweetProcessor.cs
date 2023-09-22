@@ -33,7 +33,7 @@ public class KsqlDbTweetProcessor
     }
     public async Task Run()
     {
-        await using var context = factory.Create();
+        await using var context =factory.Create((options => options.ShouldPluralizeFromItemName = true));
         using var disposable = LatestByOffset(context);
     }
 

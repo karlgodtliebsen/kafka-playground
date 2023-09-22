@@ -9,7 +9,6 @@ if (!File.Exists(configFile))
     return 0;
 }
 
-// var conf = new ProducerConfig { BootstrapServers = "localhost:9092" };
 IConfiguration configuration = new ConfigurationBuilder()
     .AddIniFile(configFile)
     .Build();

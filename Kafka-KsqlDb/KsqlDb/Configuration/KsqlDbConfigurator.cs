@@ -10,6 +10,7 @@ using KsqlDb.HostServices;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 
 namespace KsqlDb.Configuration;
@@ -25,6 +26,7 @@ public static class KsqlDbConfigurator
         services.AddTransient<KsqlDbTweetProcessor>();
         services.AddHostedService<KsqlDbProcessorService>();
 
+
         services.AddDbContext<IApplicationKSqlDbContext, ApplicationKSqlDbContext>(
             options =>
             {
@@ -33,19 +35,20 @@ public static class KsqlDbConfigurator
             }, contextLifetime: ServiceLifetime.Transient, restApiLifetime: ServiceLifetime.Transient);
 
         services.AddDbContextFactory<IApplicationKSqlDbContext>(factoryLifetime: ServiceLifetime.Scoped);
+        
         services.AddTransient<IKSqlDbContextFactory, KSqlDbContextFactory>();
 
-        services.AddTransient<ksqlDB.RestApi.Client.KSql.RestApi.Http.IHttpClientFactory>((sp) =>
-        {
-            var cfg = sp.GetRequiredService<IOptions<KsqlDbConfiguration>>().Value;
-            var httpClient = new HttpClient()
-            {
-                BaseAddress = new Uri(cfg.EndPoint!)
-            };
-            return new HttpClientFactory(httpClient);
-        });
+        //services.AddTransient<ksqlDB.RestApi.Client.KSql.RestApi.Http.IHttpClientFactory>((sp) =>
+        //{
+        //    var cfg = sp.GetRequiredService<IOptions<KsqlDbConfiguration>>().Value;
 
-        services.AddTransient<IKSqlDbRestApiClient, KSqlDbRestApiClient>();
+        //    var httpClient = new HttpClient()
+        //    {
+        //        BaseAddress = new Uri(cfg.EndPoint!)
+        //    };
+        //    return new HttpClientFactory(httpClient);
+        //});
+        //services.AddTransient<IKSqlDbRestApiClient, KSqlDbRestApiClient>();
         return services;
     }
 }

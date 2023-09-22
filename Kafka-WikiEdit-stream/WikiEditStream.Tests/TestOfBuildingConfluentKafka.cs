@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Options;
 
 using WikiEditStream.Configuration;
+using WikiEditStream.DockerSupport;
 
 namespace WikiEditStream.Tests
 {
@@ -16,7 +17,7 @@ namespace WikiEditStream.Tests
 
         public async Task InitializeAsync()
         {
-
+          //Is started by builder in order to get port mappings
         }
 
         public async Task DisposeAsync()
@@ -28,7 +29,7 @@ namespace WikiEditStream.Tests
         [Fact]
         public async Task TestOfConfluentKafkaSetup()
         {
-            await kafkaDockerComposeBuilder.BuildConfluentDocker();
+            await kafkaDockerComposeBuilder.BuildAndStartConfluentDocker();
         }
     }
 }

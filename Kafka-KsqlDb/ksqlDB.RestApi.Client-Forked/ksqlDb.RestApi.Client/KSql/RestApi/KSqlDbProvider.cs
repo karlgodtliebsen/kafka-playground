@@ -80,7 +80,6 @@ internal abstract class KSqlDbProvider : IKSqlDbProvider
     catch (Exception exception)
     {
       logger?.LogError(exception, "Query execution failed.");
-
       throw;
     }
   }

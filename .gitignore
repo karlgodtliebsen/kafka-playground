@@ -396,4 +396,3 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-/Kafka-KafkaFlow-producer-consumer/KafkaFlow-FlowControl/Configuration/KafkaFlowConfigurator.cs

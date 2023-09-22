@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
+using WikiEditStream.DockerSupport;
 using WikiEditStream.Domain;
 
 namespace WikiEditStream.Configuration;
@@ -12,9 +12,9 @@ public static class KafkaConfigurator
     {
         services.Configure<KafkaConfiguration>(configuration.GetSection(KafkaConfiguration.SectionName));
         services.AddTransient<ConfluentKafkaDockerComposeBuilder>();
+        services.AddTransient<KafkaAdminClient>();
         services.AddTransient<KafkaConsumer>();
         services.AddTransient<KafkaProducer>();
-        services.AddTransient<KafkaAdminClient>();
         services.AddTransient<KafkaStreaming>();
         services.AddTransient<BootstrapTestContainer>();
         return services;

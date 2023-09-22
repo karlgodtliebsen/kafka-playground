@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
-using WikiEditStream;
 using WikiEditStream.Configuration;
+using WikiEditStream.DockerSupport;
 
 public class BootstrapTestContainer
 {
@@ -17,7 +17,7 @@ public class BootstrapTestContainer
     {
         if (configuration.UserDockerTestContainer)
         {
-            await dockerComposeBuilder.BuildConfluentDocker();
+            await dockerComposeBuilder.BuildAndStartConfluentDocker();
             Console.WriteLine(dockerComposeBuilder.PortData());
         }
     }

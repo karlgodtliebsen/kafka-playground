@@ -8,6 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Domain\avroStream\**" />
+    <Compile Remove="Domain\prometheusStream\**" />
+    <EmbeddedResource Remove="Domain\avroStream\**" />
+    <EmbeddedResource Remove="Domain\prometheusStream\**" />
+    <None Remove="Domain\avroStream\**" />
+    <None Remove="Domain\prometheusStream\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="appsettings.json" />
   </ItemGroup>
 
@@ -40,12 +49,6 @@
 		<PackageReference Include="Testcontainers" Version="3.4.0" />
 		<PackageReference Include="Testcontainers.Kafka" Version="3.4.0" />
 		<PackageReference Include="TestContainers.TestEnvironment.xUnit" Version="0.1.14" />
-	</ItemGroup>
-
-
-	<ItemGroup>
-	  <Folder Include="Domain\avroStream\" />
-	  <Folder Include="Domain\prometheusStream\" />
 	</ItemGroup>
 
 </Project>
