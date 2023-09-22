@@ -1,16 +1,18 @@
 using ksqlDB.RestApi.Client.KSql.Query;
-using System.Text.Json.Serialization;
 using ksqlDB.RestApi.Client.KSql.RestApi.Statements.Annotations;
+
+using System.Text.Json.Serialization;
 
 namespace KsqlDb.Domain.Models;
 
 
 public class Tweet : Record
 {
+    [Key]
     [JsonPropertyName("Id")]
     public int Id { get; set; }
 
-    
+
     [JsonPropertyName("MESSAGE")]
     public string Message { get; set; } = null!;
 
@@ -18,7 +20,7 @@ public class Tweet : Record
     [JsonPropertyName("TEST")]
     public string Test { get; set; } = "test"!;
 
-    [JsonPropertyName("AMOUNT")] 
+    [JsonPropertyName("AMOUNT")]
     public double Amount { get; set; } = 42.0;
 
     //[JsonPropertyName("ACCOUNTBALANCE")]

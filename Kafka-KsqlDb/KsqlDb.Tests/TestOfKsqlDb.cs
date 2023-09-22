@@ -1,21 +1,26 @@
-using KsqlDb.Domain;
+using FluentAssertions;
+
 using ksqlDB.RestApi.Client.KSql.Linq;
 using ksqlDB.RestApi.Client.KSql.Query.Options;
 using ksqlDB.RestApi.Client.KSql.RestApi;
 using ksqlDB.RestApi.Client.KSql.RestApi.Http;
 using ksqlDB.RestApi.Client.KSql.RestApi.Statements;
-using Xunit.Abstractions;
-using FluentAssertions;
+using ksqlDB.RestApi.Client.KSql.RestApi.Statements.Properties;
+
 using KsqlDb.Configuration;
+using KsqlDb.DbContext;
+using KsqlDb.Domain;
+using KsqlDb.Domain.Models;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using KsqlDb.DbContext;
-using KsqlDb.Domain.Models;
+
+using Xunit.Abstractions;
+
 using IHttpClientFactory = ksqlDB.RestApi.Client.KSql.RestApi.Http.IHttpClientFactory;
-using ksqlDB.RestApi.Client.KSql.RestApi.Statements.Properties;
 
 namespace KsqlDbTests;
 
@@ -75,7 +80,7 @@ public class TestOfKsqlDb
     //select * from USERS_TABLE EMIT CHANGES;
 
     [Fact]
-    public async Task TestOfTweetKsqlDbStreamCreation()
+    public async Task TestOfCrateTweetKsqlDbStream()
     {
         var ksqlDbOptions = serviceProvider.GetRequiredService<IOptions<KsqlDbConfiguration>>().Value;
         output.WriteLine(ksqlDbOptions.KafkaTopic);
@@ -101,7 +106,7 @@ public class TestOfKsqlDb
 
 
     [Fact]
-    public async Task TestOfTweetKsqlDbStreamCreationUsingConfiguredServices()
+    public async Task TestOfCreateTweetStreamUsingConfiguredServices()
     {
         var ksqlDbOptions = serviceProvider.GetRequiredService<IOptions<KsqlDbConfiguration>>().Value;
         output.WriteLine(ksqlDbOptions.KafkaTopic);
@@ -120,13 +125,62 @@ public class TestOfKsqlDb
         httpResponseMessage.EnsureSuccessStatusCode();
     }
 
+
     [Fact]
-    public async Task TestOfTweetStreamCreationUsingAdminClient()
+    public async Task TestOfDropAndCreateTweetStreamUsingAdminClient()
     {
         var client = serviceProvider.GetRequiredService<KsqlDbAdminClient>();
-        await client.CreateStream(CancellationToken.None);
+        await client.DropStream<Tweet>("tweets", cancellationToken: CancellationToken.None);
+        await client.CreateTopic("tweets", cancellationToken: CancellationToken.None);
+        await client.CreateStream<Tweet>(cancellationToken: CancellationToken.None);
     }
 
+
+    [Fact]
+    public async Task TestOfDropAndCreateTweetTableUsingAdminClient()
+    {
+        var client = serviceProvider.GetRequiredService<KsqlDbAdminClient>();
+        await client.DropTable<Tweet>("tweets_table", cancellationToken: CancellationToken.None);
+        await client.CreateTable<Tweet>("tweets", "tweets_table", cancellationToken: CancellationToken.None);
+    }
+
+    [Fact]
+    public async Task TestOfCreateTweetTableUsingAdminClient()
+    {
+        var client = serviceProvider.GetRequiredService<KsqlDbAdminClient>();
+        await client.DropTable<Tweet>("tweets_table", cancellationToken: CancellationToken.None);
+        await client.CreateTable<Tweet>("tweets", "tweets_table", cancellationToken: CancellationToken.None);
+    }
+
+
+    [Fact]
+    public async Task TestOfCreateTweetSourceTableUsingAdminClient()
+    {
+        var client = serviceProvider.GetRequiredService<KsqlDbAdminClient>();
+        await client.DropTable<Tweet>("tweets_table", cancellationToken: CancellationToken.None);
+        await client.CreateSourceTable<Tweet>("tweets", "tweets_table", cancellationToken: CancellationToken.None);
+    }
+
+    [Fact]
+    public async Task TestOfCreateTweetSourceTableUsingAdminClientAndStatement()
+    {
+        var client = serviceProvider.GetRequiredService<KsqlDbAdminClient>();
+        await client.DropTable<Tweet>("topicidentitytable", cancellationToken: CancellationToken.None);
+        await client.CreateTable("topicidentitymap", "topicidentitytable", cancellationToken: CancellationToken.None);
+    }
+
+    [Fact]
+    public async Task TestOfCreateTopicIdentityMapSourceTableUsingAdminClientAndStatement()
+    {
+
+        var client = serviceProvider.GetRequiredService<KsqlDbAdminClient>();
+        await client.DropTable<Tweet>("tweets_table", cancellationToken: CancellationToken.None);
+        await client.DropStream<Tweet>("tweets", deleteTopic: true, cancellationToken: CancellationToken.None);
+        await client.CreateTopic("tweets", cancellationToken: CancellationToken.None);
+
+        await client.CreateStream<Tweet>("tweets", cancellationToken: CancellationToken.None);
+        await client.CreateSourceTable<Tweet>("tweets", "tweets_table", cancellationToken: CancellationToken.None);
+    }
 
     [Fact]
     public async Task TestOfTweetInsertRecords()
@@ -139,7 +193,7 @@ public class TestOfKsqlDb
         };
         for (int i = 0; i < 100; i++)
         {
-            var httpResponseMessage = await restApiClient.InsertIntoAsync(new Tweet { Id = 4, Message = "Hello world"+ i.ToString()/*, Amount = 100.0, AccountBalance = 1.0m*/ }, insertProperties, cancellationToken: CancellationToken.None);
+            var httpResponseMessage = await restApiClient.InsertIntoAsync(new Tweet { Id = 4, Message = "Hello world" + i.ToString()/*, Amount = 100.0, AccountBalance = 1.0m*/ }, insertProperties, cancellationToken: CancellationToken.None);
             output.WriteLine(httpResponseMessage.ReasonPhrase);
             httpResponseMessage.EnsureSuccessStatusCode();
 
@@ -204,8 +258,8 @@ public class TestOfKsqlDb
 
         using var subscription = context.CreateQueryStream<Tweet>()
             .WithOffsetResetPolicy(AutoOffsetReset.Earliest)
-           // .Where(p => p.Message != "Hello world")
-            .Select(l => new { l.Message, l.Id,l.Amount })
+            // .Where(p => p.Message != "Hello world")
+            .Select(l => new { l.Message, l.Id, l.Amount })
             .Take(2)
             .Subscribe(message =>
                 {

@@ -1,4 +1,4 @@
-﻿using ksqlDB.Api.Client.Samples.Models.Sensors;
+using ksqlDB.Api.Client.Samples.Models.Sensors;
 using ksqlDB.RestApi.Client.KSql.Linq.PullQueries;
 using ksqlDB.RestApi.Client.KSql.Linq.Statements;
 using ksqlDB.RestApi.Client.KSql.Query.Context;
@@ -39,7 +39,7 @@ public class PullQueryExample
     restApiClient = new KSqlDbRestApiClient(httpClientFactory)
       .SetCredentials(new BasicAuthCredentials("fred", "letmein"));
 
-    ((KSqlDbRestApiClient) restApiClient).DisposeHttpClient = false;
+    ((KSqlDbRestApiClient)restApiClient).DisposeHttpClient = false;
 
     await CreateOrReplaceStreamAsync();
 
@@ -47,13 +47,13 @@ public class PullQueryExample
       .As<IoTSensor>("sensor_values")
       .GroupBy(c => c.SensorId)
       .WindowedBy(new TimeWindows(Duration.OfSeconds(5)).WithGracePeriod(Duration.OfHours(2)))
-      .Select(c => new {SensorId = c.Key, AvgValue = c.Avg(g => g.Value)});
+      .Select(c => new { SensorId = c.Key, AvgValue = c.Avg(g => g.Value) });
 
     var query = statement.ToStatementString();
 
     var response = await statement.ExecuteStatementAsync();
 
-    response = await InsertAsync(new IoTSensor {SensorId = "sensor-1", Value = 11});
+    response = await InsertAsync(new IoTSensor { SensorId = "sensor-1", Value = 11 });
 
     await PullSensor(context);
   }
@@ -71,8 +71,7 @@ public class PullQueryExample
     var sql = pullQuery.ToQueryString();
 
     await foreach (var item in pullQuery.GetManyAsync().OrderBy(c => c.SensorId).ConfigureAwait(false))
-      Console.WriteLine(
-        $"Pull query - GetMany result => Id: {item?.SensorId} - Avg Value: {item?.AvgValue} - Window Start {item?.WindowStart}");
+      Console.WriteLine($"Pull query - GetMany result => Id: {item?.SensorId} - Avg Value: {item?.AvgValue} - Window Start {item?.WindowStart}");
 
     var list = await pullQuery.GetManyAsync().OrderBy(c => c.SensorId).ToListAsync();
     var ksql = "SELECT * FROM avg_sensor_values WHERE SensorId = 'sensor-1';";
@@ -82,11 +81,9 @@ public class PullQueryExample
 
   private static async Task GetAsync(IPullable<IoTSensorStats> pullQuery)
   {
-    var result = await pullQuery
-      .FirstOrDefaultAsync();
+    var result = await pullQuery.FirstOrDefaultAsync();
 
-    Console.WriteLine(
-      $"Pull query GetAsync result => Id: {result?.SensorId} - Avg Value: {result?.AvgValue} - Window Start {result?.WindowStart}");
+    Console.WriteLine($"Pull query GetAsync result => Id: {result?.SensorId} - Avg Value: {result?.AvgValue} - Window Start {result?.WindowStart}");
 
     Console.WriteLine();
   }

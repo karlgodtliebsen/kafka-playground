@@ -12,7 +12,6 @@ using Microsoft.Extensions.Options;
 namespace KsqlDb.Domain;
 
 
-
 //https://github.com/tomasfabian/ksqlDB.RestApi.Client-DotNet/blob/5e02510d3fd48108f3724c8cc2e25b48101d78dc/ksqlDb.RestApi.Client/KSql/RestApi/Statements/StatementTemplates.cs#L20
 
 public class KsqlDbAdminClient
@@ -33,15 +32,14 @@ public class KsqlDbAdminClient
         using var adminClient = new AdminClientBuilder(adminConfig).Build();
         await adminClient.CreateTopicsAsync(new TopicSpecification[]
         {
-                new TopicSpecification
-                {
-                    Name = topicName,
-                    NumPartitions = 1,
-                    ReplicationFactor = 1
-                }
+            new TopicSpecification
+            {
+                Name = topicName,
+                NumPartitions = 1,
+                ReplicationFactor = 1
+            }
         });
     }
-
 
     public async Task CreateStream<T>(string? kafkaTopic = null, string? tableName = null, CancellationToken cancellationToken = default)
     {
@@ -100,6 +98,15 @@ public class KsqlDbAdminClient
             ShouldPluralizeEntityName = true,
         };
         var httpResponseMessage = await restApiClient.CreateSourceTableAsync<T>(metadata, ifNotExists: true, cancellationToken: cancellationToken);
+        httpResponseMessage.EnsureSuccessStatusCode();
+    }
+
+    public async Task CreateQuerableTable(string tableName, CancellationToken cancellationToken = default)
+    {
+        //CREATE TABLE QUERYABLE_TOPICIDENTITYTABLES AS SELECT * FROM TOPICIDENTITYTABLES;
+
+        string statement = $"CREATE TABLE QUERYABLE_{tableName}  AS SELECT * FROM {tableName};";
+        var httpResponseMessage = await restApiClient.ExecuteStatementAsync(new KSqlDbStatement(statement));
         httpResponseMessage.EnsureSuccessStatusCode();
     }
 

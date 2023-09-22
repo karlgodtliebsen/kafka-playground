@@ -68,6 +68,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlowControl", "Kafka-KafkaFlow-producer-consumer\KafkaFlow-FlowControl\FlowControl.csproj", "{83B50544-A33B-4F6D-98A9-B5134932B607}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KafkaFlow-Complex", "Kafka-KafkaFlow-producer-consumer\KafkaFlow-Complex\KafkaFlow-Complex.csproj", "{CE589D99-96CF-49FC-9265-FD0C2864F694}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KafkaFlow-Complex-Producer", "Kafka-KafkaFlow-producer-consumer\KafkaFlow-Complex-Producer\KafkaFlow-Complex-Producer.csproj", "{15622862-19EC-432D-A00C-F7B071CE12CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -154,6 +158,14 @@ Global
 		{83B50544-A33B-4F6D-98A9-B5134932B607}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83B50544-A33B-4F6D-98A9-B5134932B607}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83B50544-A33B-4F6D-98A9-B5134932B607}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE589D99-96CF-49FC-9265-FD0C2864F694}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE589D99-96CF-49FC-9265-FD0C2864F694}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE589D99-96CF-49FC-9265-FD0C2864F694}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE589D99-96CF-49FC-9265-FD0C2864F694}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15622862-19EC-432D-A00C-F7B071CE12CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15622862-19EC-432D-A00C-F7B071CE12CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15622862-19EC-432D-A00C-F7B071CE12CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15622862-19EC-432D-A00C-F7B071CE12CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -182,6 +194,8 @@ Global
 		{C6698C43-DC9D-406E-8FB6-E7FF0870801A} = {9883C3B7-26D1-43D9-B6F1-6AE8DAE66EAB}
 		{32BABD59-46FC-498D-A60A-6C7869493975} = {9883C3B7-26D1-43D9-B6F1-6AE8DAE66EAB}
 		{83B50544-A33B-4F6D-98A9-B5134932B607} = {9883C3B7-26D1-43D9-B6F1-6AE8DAE66EAB}
+		{CE589D99-96CF-49FC-9265-FD0C2864F694} = {9883C3B7-26D1-43D9-B6F1-6AE8DAE66EAB}
+		{15622862-19EC-432D-A00C-F7B071CE12CB} = {9883C3B7-26D1-43D9-B6F1-6AE8DAE66EAB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D83B2424-C1F1-4FAF-B9DA-E1ACE6854ABC}
