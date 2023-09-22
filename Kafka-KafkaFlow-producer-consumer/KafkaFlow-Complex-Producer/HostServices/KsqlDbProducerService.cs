@@ -15,7 +15,7 @@ public class KsqlDbProducerService : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        Console.WriteLine("Starting production");
+        Console.WriteLine("Starting Sample Data Production");
         await producer.Run(stoppingToken);
     }
 

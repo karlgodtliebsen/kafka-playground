@@ -1,6 +1,9 @@
 ﻿using KafkaFlow;
 using KafkaFlow.Serializer;
 
+using KsqlDb.Domain;
+using KsqlDb.HostServices;
+
 using Messages;
 
 using Microsoft.Extensions.Configuration;
@@ -16,6 +19,8 @@ public static class KafkaFlowControlConfigurator
         sectionName = sectionName ?? KafkaFlowConfiguration.SectionName;
         services.Configure<KafkaFlowConfiguration>(configuration.GetSection(sectionName));
         var config = configuration.GetSection(sectionName).Get<KafkaFlowConfiguration>()!;
+        services.AddTransient<KsqlDbDataSourceProducer>();
+        services.AddHostedService<KsqlDbProducerService>();
 
         services.AddKafka(
             kafka => kafka

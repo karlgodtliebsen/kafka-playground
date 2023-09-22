@@ -21,12 +21,7 @@ public static class KsqlDbConfigurator
         services.AddSingleton(Options.Create(config!));
         services.AddTransient<KsqlDbAdminClient>();
         services.AddTransient<KsqlDbDataSourceProcessor>();
-        services.AddTransient<KsqlDbDataSourceProducer>();
-
-
-        services.AddHostedService<KsqlDbProducerService>();
         services.AddHostedService<KsqlDbProcessorService>();
-
         services.AddDbContext<IApplicationKSqlDbContext, ApplicationKSqlDbContext>(
             options =>
             {

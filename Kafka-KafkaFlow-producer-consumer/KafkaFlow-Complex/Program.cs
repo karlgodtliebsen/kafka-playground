@@ -28,7 +28,7 @@ builder.ConfigureServices((services) =>
 var host = builder.Build();
 using (host)
 {
-    Console.WriteLine("Starting Host. Press <Enter> to exit");
+    Console.WriteLine("Starting ksqlDb Processor Host. Press <Enter> to exit");
     await host.RunAsync();
     Console.ReadLine();
 }
