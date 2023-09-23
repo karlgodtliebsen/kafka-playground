@@ -14,6 +14,7 @@ SparkSession spark =
 string filePath = args[0];
 DataFrame dataFrame = spark.Read().Text(filePath);
 
+
 //Count words
 DataFrame words =
     dataFrame
