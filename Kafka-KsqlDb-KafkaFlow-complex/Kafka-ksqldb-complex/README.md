@@ -141,3 +141,20 @@ CREATE TABLE QUERYABLE_TOPICIDENTITYTABLES AS SELECT * FROM TOPICIDENTITYTABLES;
 - https://github.com/tomasfabian/ksqlDB.RestApi.Client-DotNet/blob/5e02510d3fd48108f3724c8cc2e25b48101d78dc/docs/statements.md
 - https://github.com/tomasfabian/ksqlDB.RestApi.Client-DotNet/blob/5e02510d3fd48108f3724c8cc2e25b48101d78dc/docs/streams_and_tables.md
 
+
+
+
+
+# Opensearch Connector
+- https://opensearch.org/docs/latest/install-and-configure/install-opensearch/docker/#important-host-settings
+
+
+docker pull opensearchproject/opensearch:2
+docker pull opensearchproject/opensearch-dashboards:2
+
+docker compose:
+
+````
+cd .\kafka-playground\docker
+docker-compose -f .\docker-compose-opensearch.yml up -d
+````

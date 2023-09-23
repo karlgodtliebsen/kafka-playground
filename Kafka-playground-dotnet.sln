@@ -56,9 +56,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Producer", "Kafka-KafkaFlow
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DDE6D3D4-C3AB-4E8B-B288-FC83FE6A5538}"
 	ProjectSection(SolutionItems) = preProject
-		docker-compose-confluent.yml = docker-compose-confluent.yml
-		docker-compose-kafkaFlow.yml = docker-compose-kafkaFlow.yml
-		docker-compose-ksqldb-rest.yml = docker-compose-ksqldb-rest.yml
+		docker\docker-compose-confluent.yml = docker\docker-compose-confluent.yml
+		docker\docker-compose-kafkaFlow.yml = docker\docker-compose-kafkaFlow.yml
+		docker\docker-compose-ksqldb-rest.yml = docker\docker-compose-ksqldb-rest.yml
+		docker\docker-compose-opensearch.yml = docker\docker-compose-opensearch.yml
 		README.md = README.md
 	EndProjectSection
 EndProject
