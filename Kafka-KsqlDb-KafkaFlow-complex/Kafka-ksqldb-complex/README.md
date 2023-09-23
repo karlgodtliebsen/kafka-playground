@@ -77,9 +77,7 @@ CREATE OR REPLACE TABLE TopicIdentityTables (
       ) WITH ( KAFKA_TOPIC='topicidentitymap', VALUE_FORMAT='Json', PARTITIONS='1', REPLICAS='1' );
 ````
 
-
-Create the Select expression joining the datasourcestream and the table view
-
+Test by running the  Select expression joining the datasourcestream and the table view
 ````
 SELECT ds.Id, 
        ds.Name, 
@@ -144,13 +142,38 @@ CREATE TABLE QUERYABLE_TOPICIDENTITYTABLES AS SELECT * FROM TOPICIDENTITYTABLES;
 
 
 
-
-# Opensearch Connector
+## Opensearch Connector
 - https://opensearch.org/docs/latest/install-and-configure/install-opensearch/docker/#important-host-settings
 
 
-docker pull opensearchproject/opensearch:2
-docker pull opensearchproject/opensearch-dashboards:2
+### OpenSearch docker:
+````
+docker pull opensearchproject/opensearch:latest
+docker run -p 9200:9200 -p 9600:9600 -e "discovery.type=single-node" --name opensearch-node -d opensearchproject/opensearch:latest
+````
+
+````
+curl -X GET "https://localhost:9200" -ku admin:admin
+curl -X GET "https://localhost:9200/_cat/nodes?v" -ku admin:admin
+curl -X GET "https://localhost:9200/_cat/plugins?v" -ku admin:admin
+````
+````
+docker stop opensearch-node
+````
+
+````
+docker pull opensearchproject/opensearch-dashboards:latest
+docker run -p 5601:5601 -e 'OPENSEARCH_HOSTS=["http://opensearch-node:9200"]' -e "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true" --name o opensearch-dashboards -d opensearchproject/opensearch-dashboards:latest
+````
+
+#### Dashboard parameters for Docker Desktop:
+````
+- OPENSEARCH_HOSTS=["http://opensearch-node:9200"]
+
+- DISABLE_SECURITY_DASHBOARDS_PLUGIN=true
+
+262144
+````
 
 docker compose:
 
@@ -158,3 +181,5 @@ docker compose:
 cd .\kafka-playground\docker
 docker-compose -f .\docker-compose-opensearch.yml up -d
 ````
+
+
