@@ -75,6 +75,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WikiEditStream", "Kafka-str
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WikiEditStream.Tests", "Kafka-streaming-WikiEdit\Kafka-WikiEditStream.Tests\WikiEditStream.Tests.csproj", "{D1E67449-5024-4F27-A053-BCFF4F79E213}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kafka-Apache-Spark", "Kafka-Apache-Spark", "{02C09DB6-0879-4027-A4B9-B6750885832A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kafka-Apache-Spark", "Kafka-Apache-Spark\Kafka-Apache-Spark\Kafka-Apache-Spark.csproj", "{45149396-76DA-4A90-9820-42467DE239C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -169,6 +173,10 @@ Global
 		{D1E67449-5024-4F27-A053-BCFF4F79E213}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1E67449-5024-4F27-A053-BCFF4F79E213}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1E67449-5024-4F27-A053-BCFF4F79E213}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45149396-76DA-4A90-9820-42467DE239C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45149396-76DA-4A90-9820-42467DE239C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45149396-76DA-4A90-9820-42467DE239C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45149396-76DA-4A90-9820-42467DE239C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -199,6 +207,7 @@ Global
 		{BCAE6B89-8F89-4935-9EFF-6511123122B6} = {DF9F2730-5804-4E71-9277-1DF25B7FE64C}
 		{1376B16F-88FE-415A-9452-8C4B9F6CDD29} = {3B04A0EC-782D-41D8-AD34-A024F376066B}
 		{D1E67449-5024-4F27-A053-BCFF4F79E213} = {3B04A0EC-782D-41D8-AD34-A024F376066B}
+		{45149396-76DA-4A90-9820-42467DE239C8} = {02C09DB6-0879-4027-A4B9-B6750885832A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D83B2424-C1F1-4FAF-B9DA-E1ACE6854ABC}
