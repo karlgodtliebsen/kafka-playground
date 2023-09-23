@@ -3,13 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34018.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple-Producer", "Kafka-simple-producer-consumer\simple-producer\Simple-Producer.csproj", "{04AF84C6-D85A-4AE7-B716-8C042FCD50EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple-Producer", "Kafka-producer-consumer-simple\simple-producer\Simple-Producer.csproj", "{04AF84C6-D85A-4AE7-B716-8C042FCD50EE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple-Consumer", "Kafka-simple-producer-consumer\simple-consumer\Simple-Consumer.csproj", "{DB3FD1F9-D973-4A79-BD75-6009743E8FD7}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WikiEditStream", "Kafka-WikiEdit-stream\WikiEditStream\WikiEditStream.csproj", "{7D5928D7-39E4-4855-97C3-2CDFE418FB24}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WikiEditStream.Tests", "Kafka-WikiEdit-stream\WikiEditStream.Tests\WikiEditStream.Tests.csproj", "{CE7F9B7C-14EA-4CB3-8A98-43FD8020178F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simple-Consumer", "Kafka-producer-consumer-simple\simple-consumer\Simple-Consumer.csproj", "{DB3FD1F9-D973-4A79-BD75-6009743E8FD7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KsqlDb", "Kafka-KsqlDb\KsqlDb\KsqlDb.csproj", "{C74925EC-6439-4CB1-B644-CFD03F0EFC60}"
 EndProject
@@ -43,7 +39,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Statements", "Kafka-KsqlDb\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ksqlDb.RestApi.Client.ProtoBuf", "Kafka-KsqlDb\ksqlDB.RestApi.Client-Forked\ksqlDb.RestApi.Client.ProtoBuf\ksqlDb.RestApi.Client.ProtoBuf.csproj", "{0125C8CD-C516-4713-9B5D-6DD83179199A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kafka-simple-producer-consumer", "Kafka-simple-producer-consumer", "{BFAC2283-CCE7-4555-A4A0-B5885D33B7EC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kafka-producer-consumer-simple", "Kafka-producer-consumer-simple", "{BFAC2283-CCE7-4555-A4A0-B5885D33B7EC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kafka-KafkaFlow", "Kafka-KafkaFlow", "{9883C3B7-26D1-43D9-B6F1-6AE8DAE66EAB}"
 	ProjectSection(SolutionItems) = preProject
@@ -52,7 +48,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kafka-KafkaFlow", "Kafka-Ka
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kafka-KsqlDb", "Kafka-KsqlDb", "{A67A6868-B97C-4103-ACFF-328117CD7243}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kafka-WikiEdit-stream", "Kafka-WikiEdit-stream", "{3B04A0EC-782D-41D8-AD34-A024F376066B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kafka-streaming-WikiEdit", "Kafka-streaming-WikiEdit", "{3B04A0EC-782D-41D8-AD34-A024F376066B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Consumer", "Kafka-KafkaFlow-producer-consumer\KafkaFlow-consumer\Consumer.csproj", "{C6698C43-DC9D-406E-8FB6-E7FF0870801A}"
 EndProject
@@ -60,17 +56,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Producer", "Kafka-KafkaFlow
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DDE6D3D4-C3AB-4E8B-B288-FC83FE6A5538}"
 	ProjectSection(SolutionItems) = preProject
-		docker-compose-kafkaFlow.yml = docker-compose-kafkaFlow.yml
 		docker-compose-confluent.yml = docker-compose-confluent.yml
+		docker-compose-kafkaFlow.yml = docker-compose-kafkaFlow.yml
 		docker-compose-ksqldb-rest.yml = docker-compose-ksqldb-rest.yml
 		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlowControl", "Kafka-KafkaFlow-producer-consumer\KafkaFlow-FlowControl\FlowControl.csproj", "{83B50544-A33B-4F6D-98A9-B5134932B607}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KafkaFlow-Complex", "Kafka-KafkaFlow-producer-consumer\KafkaFlow-Complex\KafkaFlow-Complex.csproj", "{CE589D99-96CF-49FC-9265-FD0C2864F694}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kafka-KsqlDb-KafkaFlow-complex", "Kafka-KsqlDb-KafkaFlow-complex", "{DF9F2730-5804-4E71-9277-1DF25B7FE64C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KafkaFlow-Complex-Producer", "Kafka-KafkaFlow-producer-consumer\KafkaFlow-Complex-Producer\KafkaFlow-Complex-Producer.csproj", "{15622862-19EC-432D-A00C-F7B071CE12CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kafka-ksqldb-complex", "Kafka-KsqlDb-KafkaFlow-complex\Kafka-ksqldb-complex\Kafka-ksqldb-complex.csproj", "{2A9AB250-3491-4075-B5B7-0A3BFEFDE1D1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kafka-KafkaFlow-sampledata-producer", "Kafka-KsqlDb-KafkaFlow-complex\Kafka-KafkaFlow-sampledata-producer\Kafka-KafkaFlow-sampledata-producer.csproj", "{BCAE6B89-8F89-4935-9EFF-6511123122B6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WikiEditStream", "Kafka-streaming-WikiEdit\Kafka-WikiEditStream\WikiEditStream.csproj", "{1376B16F-88FE-415A-9452-8C4B9F6CDD29}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WikiEditStream.Tests", "Kafka-streaming-WikiEdit\Kafka-WikiEditStream.Tests\WikiEditStream.Tests.csproj", "{D1E67449-5024-4F27-A053-BCFF4F79E213}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -86,14 +88,6 @@ Global
 		{DB3FD1F9-D973-4A79-BD75-6009743E8FD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB3FD1F9-D973-4A79-BD75-6009743E8FD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB3FD1F9-D973-4A79-BD75-6009743E8FD7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7D5928D7-39E4-4855-97C3-2CDFE418FB24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7D5928D7-39E4-4855-97C3-2CDFE418FB24}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7D5928D7-39E4-4855-97C3-2CDFE418FB24}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7D5928D7-39E4-4855-97C3-2CDFE418FB24}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CE7F9B7C-14EA-4CB3-8A98-43FD8020178F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CE7F9B7C-14EA-4CB3-8A98-43FD8020178F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CE7F9B7C-14EA-4CB3-8A98-43FD8020178F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CE7F9B7C-14EA-4CB3-8A98-43FD8020178F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C74925EC-6439-4CB1-B644-CFD03F0EFC60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C74925EC-6439-4CB1-B644-CFD03F0EFC60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C74925EC-6439-4CB1-B644-CFD03F0EFC60}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -158,14 +152,22 @@ Global
 		{83B50544-A33B-4F6D-98A9-B5134932B607}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83B50544-A33B-4F6D-98A9-B5134932B607}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83B50544-A33B-4F6D-98A9-B5134932B607}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CE589D99-96CF-49FC-9265-FD0C2864F694}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CE589D99-96CF-49FC-9265-FD0C2864F694}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CE589D99-96CF-49FC-9265-FD0C2864F694}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CE589D99-96CF-49FC-9265-FD0C2864F694}.Release|Any CPU.Build.0 = Release|Any CPU
-		{15622862-19EC-432D-A00C-F7B071CE12CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{15622862-19EC-432D-A00C-F7B071CE12CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{15622862-19EC-432D-A00C-F7B071CE12CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{15622862-19EC-432D-A00C-F7B071CE12CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A9AB250-3491-4075-B5B7-0A3BFEFDE1D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A9AB250-3491-4075-B5B7-0A3BFEFDE1D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A9AB250-3491-4075-B5B7-0A3BFEFDE1D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A9AB250-3491-4075-B5B7-0A3BFEFDE1D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCAE6B89-8F89-4935-9EFF-6511123122B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCAE6B89-8F89-4935-9EFF-6511123122B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCAE6B89-8F89-4935-9EFF-6511123122B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCAE6B89-8F89-4935-9EFF-6511123122B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1376B16F-88FE-415A-9452-8C4B9F6CDD29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1376B16F-88FE-415A-9452-8C4B9F6CDD29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1376B16F-88FE-415A-9452-8C4B9F6CDD29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1376B16F-88FE-415A-9452-8C4B9F6CDD29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1E67449-5024-4F27-A053-BCFF4F79E213}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1E67449-5024-4F27-A053-BCFF4F79E213}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1E67449-5024-4F27-A053-BCFF4F79E213}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1E67449-5024-4F27-A053-BCFF4F79E213}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -173,8 +175,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{04AF84C6-D85A-4AE7-B716-8C042FCD50EE} = {BFAC2283-CCE7-4555-A4A0-B5885D33B7EC}
 		{DB3FD1F9-D973-4A79-BD75-6009743E8FD7} = {BFAC2283-CCE7-4555-A4A0-B5885D33B7EC}
-		{7D5928D7-39E4-4855-97C3-2CDFE418FB24} = {3B04A0EC-782D-41D8-AD34-A024F376066B}
-		{CE7F9B7C-14EA-4CB3-8A98-43FD8020178F} = {3B04A0EC-782D-41D8-AD34-A024F376066B}
 		{C74925EC-6439-4CB1-B644-CFD03F0EFC60} = {A67A6868-B97C-4103-ACFF-328117CD7243}
 		{20118E17-D8E0-4A90-BF6C-382CC01D966F} = {A67A6868-B97C-4103-ACFF-328117CD7243}
 		{B7A81F14-5E59-4697-B075-2445CE799599} = {A67A6868-B97C-4103-ACFF-328117CD7243}
@@ -194,8 +194,10 @@ Global
 		{C6698C43-DC9D-406E-8FB6-E7FF0870801A} = {9883C3B7-26D1-43D9-B6F1-6AE8DAE66EAB}
 		{32BABD59-46FC-498D-A60A-6C7869493975} = {9883C3B7-26D1-43D9-B6F1-6AE8DAE66EAB}
 		{83B50544-A33B-4F6D-98A9-B5134932B607} = {9883C3B7-26D1-43D9-B6F1-6AE8DAE66EAB}
-		{CE589D99-96CF-49FC-9265-FD0C2864F694} = {9883C3B7-26D1-43D9-B6F1-6AE8DAE66EAB}
-		{15622862-19EC-432D-A00C-F7B071CE12CB} = {9883C3B7-26D1-43D9-B6F1-6AE8DAE66EAB}
+		{2A9AB250-3491-4075-B5B7-0A3BFEFDE1D1} = {DF9F2730-5804-4E71-9277-1DF25B7FE64C}
+		{BCAE6B89-8F89-4935-9EFF-6511123122B6} = {DF9F2730-5804-4E71-9277-1DF25B7FE64C}
+		{1376B16F-88FE-415A-9452-8C4B9F6CDD29} = {3B04A0EC-782D-41D8-AD34-A024F376066B}
+		{D1E67449-5024-4F27-A053-BCFF4F79E213} = {3B04A0EC-782D-41D8-AD34-A024F376066B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D83B2424-C1F1-4FAF-B9DA-E1ACE6854ABC}
