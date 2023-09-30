@@ -1,6 +1,6 @@
-﻿namespace FlowControl;
+﻿namespace KafkaFlow_Messages;
 
-internal class SampleMessage
+public class SampleMessage
 {
     public string Id { get; set; }
 

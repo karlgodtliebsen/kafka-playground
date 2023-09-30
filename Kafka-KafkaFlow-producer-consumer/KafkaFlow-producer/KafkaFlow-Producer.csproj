@@ -24,8 +24,13 @@
 		<PackageReference Include="KafkaFlow.Retry.Postgres" Version="2.1.2" />
 		<PackageReference Include="KafkaFlow.SchemaRegistry" Version="2.5.0-beta.11" />
 		<PackageReference Include="KafkaFlow.Serializer" Version="2.5.0-beta.11" />
+		<PackageReference Include="KafkaFlow.Serializer.ApacheAvro" Version="1.5.8" />
 		<PackageReference Include="KafkaFlow.Serializer.Json" Version="1.5.8" />
 		<PackageReference Include="KafkaFlow.Serializer.JsonCore" Version="2.5.0-beta.11" />
+		<PackageReference Include="KafkaFlow.Serializer.MessagePack" Version="1.0.0" />
+		<PackageReference Include="KafkaFlow.Serializer.ProtoBuf" Version="1.5.8" />
+		<PackageReference Include="KafkaFlow.Serializer.SchemaRegistry.ConfluentAvro" Version="2.4.1" />
+		<PackageReference Include="KafkaFlow.Serializer.SchemaRegistry.ConfluentJson" Version="2.4.1" />
 		<PackageReference Include="KafkaFlow.Serializer.SchemaRegistry.ConfluentProtobuf" Version="2.5.0-beta.11" />
 		<PackageReference Include="KafkaFlow.TypedHandler" Version="2.5.0-beta.11" />
 
@@ -37,11 +42,13 @@
 		<PackageReference Include="Testcontainers.Kafka" Version="3.5.0" />
 		<PackageReference Include="Ulid" Version="1.3.1" />
 	</ItemGroup>
-
 	<ItemGroup>
-		<None Update="appsettings.IntegrationTests.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
+		<ProjectReference Include="..\KafkaFlow-Messages\KafkaFlow-Messages.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="appsettings.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

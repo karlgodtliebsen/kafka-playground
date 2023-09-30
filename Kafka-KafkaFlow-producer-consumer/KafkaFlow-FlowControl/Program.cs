@@ -1,7 +1,8 @@
-﻿using FlowControl;
-using FlowControl.Configuration;
+﻿using FlowControl.Configuration;
 
 using KafkaFlow;
+
+using KafkaFlow_Messages;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -52,7 +53,7 @@ var consumer = bus.Consumers[config.ConsumerName];
 var run = true;
 while (run)
 {
-    if (run)
+    //if (run)
     {
         Console.Write("Number of messages to produce, Start, Stop, Pause, Resume, or Exit: ");
         var input = Console.ReadLine()?.ToLower();

@@ -1,5 +1,7 @@
 ﻿using KafkaFlow.Producers;
 
+using KafkaFlow_Messages;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -13,7 +15,7 @@ using Testcontainers.Kafka;
 using KafkaConfiguration = Producer.Configuration.KafkaConfiguration;
 
 var configurationBuilder = new ConfigurationBuilder();
-configurationBuilder.AddJsonFile("appsettings.IntegrationTests.json");
+configurationBuilder.AddJsonFile("appsettings.json");
 IConfigurationRoot configuration = configurationBuilder.Build();
 
 //https://github.com/Farfetch/kafkaflow/blob/master/samples/KafkaFlow.Sample/Program.cs

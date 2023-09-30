@@ -11,12 +11,12 @@ using Microsoft.Extensions.Options;
 using Testcontainers.Kafka;
 
 using KafkaConfiguration = Consumer.Configuration.KafkaConfiguration;
-
+//await Task.Delay(10000);
 
 //https://github.com/Farfetch/kafkaflow/blob/master/samples/KafkaFlow.Sample/Program.cs
 
 var configurationBuilder = new ConfigurationBuilder();
-configurationBuilder.AddJsonFile("appsettings.IntegrationTests.json");
+configurationBuilder.AddJsonFile("appsettings.json");
 IConfigurationRoot configuration = configurationBuilder.Build();
 
 //https://github.com/Farfetch/kafkaflow/blob/master/samples/KafkaFlow.Sample/Program.cs
@@ -52,7 +52,7 @@ var bus = provider.CreateKafkaBus();
 await bus.StartAsync();
 
 
-Console.WriteLine("Press <Enter> to stop");
+Console.WriteLine("Consumer running. Press <Enter> to stop");
 Console.ReadLine();
 await Task.Delay(3000);
 

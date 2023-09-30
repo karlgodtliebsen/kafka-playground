@@ -1,5 +1,7 @@
 ﻿using System.Runtime.Serialization;
 
+namespace KafkaFlow_Messages;
+
 [DataContract]
 public class TestMessage
 {

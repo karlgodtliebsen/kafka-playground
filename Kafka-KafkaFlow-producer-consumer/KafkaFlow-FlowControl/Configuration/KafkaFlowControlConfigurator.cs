@@ -1,6 +1,8 @@
 ﻿using KafkaFlow;
 using KafkaFlow.Serializer;
 
+using KafkaFlow_Messages;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

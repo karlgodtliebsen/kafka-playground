@@ -50,9 +50,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kafka-KsqlDb", "Kafka-KsqlD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kafka-streaming-WikiEdit", "Kafka-streaming-WikiEdit", "{3B04A0EC-782D-41D8-AD34-A024F376066B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Consumer", "Kafka-KafkaFlow-producer-consumer\KafkaFlow-consumer\Consumer.csproj", "{C6698C43-DC9D-406E-8FB6-E7FF0870801A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KafkaFlow-Consumer", "Kafka-KafkaFlow-producer-consumer\KafkaFlow-consumer\KafkaFlow-Consumer.csproj", "{C6698C43-DC9D-406E-8FB6-E7FF0870801A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Producer", "Kafka-KafkaFlow-producer-consumer\KafkaFlow-producer\Producer.csproj", "{32BABD59-46FC-498D-A60A-6C7869493975}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KafkaFlow-Producer", "Kafka-KafkaFlow-producer-consumer\KafkaFlow-producer\KafkaFlow-Producer.csproj", "{32BABD59-46FC-498D-A60A-6C7869493975}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DDE6D3D4-C3AB-4E8B-B288-FC83FE6A5538}"
 	ProjectSection(SolutionItems) = preProject
@@ -78,6 +78,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kafka-Apache-Spark", "Kafka-Apache-Spark", "{02C09DB6-0879-4027-A4B9-B6750885832A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kafka-Apache-Spark", "Kafka-Apache-Spark\Kafka-Apache-Spark\Kafka-Apache-Spark.csproj", "{45149396-76DA-4A90-9820-42467DE239C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaFlow-Messages", "Kafka-KafkaFlow-producer-consumer\KafkaFlow-Messages\KafkaFlow-Messages.csproj", "{E94CC069-543B-4409-9CAE-C5992EA65FF0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -177,6 +179,10 @@ Global
 		{45149396-76DA-4A90-9820-42467DE239C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45149396-76DA-4A90-9820-42467DE239C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45149396-76DA-4A90-9820-42467DE239C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E94CC069-543B-4409-9CAE-C5992EA65FF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E94CC069-543B-4409-9CAE-C5992EA65FF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E94CC069-543B-4409-9CAE-C5992EA65FF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E94CC069-543B-4409-9CAE-C5992EA65FF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -208,6 +214,7 @@ Global
 		{1376B16F-88FE-415A-9452-8C4B9F6CDD29} = {3B04A0EC-782D-41D8-AD34-A024F376066B}
 		{D1E67449-5024-4F27-A053-BCFF4F79E213} = {3B04A0EC-782D-41D8-AD34-A024F376066B}
 		{45149396-76DA-4A90-9820-42467DE239C8} = {02C09DB6-0879-4027-A4B9-B6750885832A}
+		{E94CC069-543B-4409-9CAE-C5992EA65FF0} = {9883C3B7-26D1-43D9-B6F1-6AE8DAE66EAB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D83B2424-C1F1-4FAF-B9DA-E1ACE6854ABC}
