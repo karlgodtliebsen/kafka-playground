@@ -1,0 +1,59 @@
+version: '3.7'
+
+services:
+
+  opensearch-node:
+    restart: always
+    image: opensearchproject/opensearch:latest
+    container_name: opensearch-node
+    environment:
+      cluster.name: opensearch-cluster # Name the cluster
+      node.name: opensearch-node # Name the node that will run in this container
+      discovery.type: single-node # 
+      discovery.seed_hosts: opensearch-node # Nodes to look for when discovering the cluster
+      bootstrap.memory_lock: true # Disable JVM heap memory swapping
+      OPENSEARCH_JAVA_OPTS: "-Xms4096m -Xmx4096m" # Set min and max JVM heap sizes to at least 50% of system RAM
+      plugins.security.ssl.transport.pemkey_filepath: certificates/opensearch-node/opensearch-node.key # relative path
+      plugins.security.ssl.transport.pemcert_filepath: certificates/opensearch-node/opensearch-node.pem
+      plugins.security.ssl.http.pemkey_filepath: certificates/opensearch-node/opensearch-node.key
+      plugins.security.ssl.http.pemcert_filepath: certificates/opensearch-node/opensearch-node.pem
+      DISABLE_INSTALL_DEMO_CONFIG: "true"
+      JAVA_HOME: /usr/share/opensearch/jdk
+      network.host: "0.0.0.0"
+    ulimits: 
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      #- "/projects/opensearch/opensearch.yml:/usr/share/opensearch/config/opensearch.yml"
+      - "/projects/opensearch/opensearch-node:/usr/share/opensearch/data"
+      - "/projects/opensearch/certs:/usr/share/opensearch/config/certificates:ro"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "1"
+    ports:
+      - 9200:9200
+      - 9600:9600 # required for Performance Analyzer
+  
+  kibana:
+    restart: always
+    image: opensearchproject/opensearch-dashboards:latest
+    container_name: opensearch-dashboards
+    environment:
+      OPENSEARCH_HOSTS: '["https://opensearch-node:9200"]' # must be a string with no spaces when specified as an environment variable
+      DISABLE_INSTALL_DEMO_CONFIG: "true"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "1"
+    volumes:
+      - "/projects/opensearch/certs:/usr/share/opensearch-dashboards/config/certificates:ro"
+      #- "/projects/opensearch/opensearch-dashboards.yml:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml"
+    ports:
+      - 5601:5601
+
+volumes:
+  opensearch-node:

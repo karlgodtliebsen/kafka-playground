@@ -20,13 +20,13 @@ services:
         soft: 262144 # Maximum number of open files for the opensearch user - set to at least 65536 (262144)
         hard: 262144
     volumes:
-      - ./opensearch-data:/usr/share/opensearch/data # Creates volume called opensearch-data and mounts it to the container
+      - /projects/opensearch/opensearch-data:/usr/share/opensearch/data # Creates volume called opensearch-data and mounts it to the container
     ports:
       - 9200:9200 # REST API
       - 9600:9600 # Performance Analyzer
     networks:
       - opensearch-net # All of the containers will join the same Docker bridge network
-  
+
  
 volumes:
   opensearch-data:

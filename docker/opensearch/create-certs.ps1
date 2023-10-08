@@ -1,51 +1,9 @@
-# https://github.com/flavienbwk/opensearch-docker-compose/blob/main/README.md
-https://opensearch.org/docs/latest/install-and-configure/install-opensearch/docker/
-
-
-docker pull opensearchproject/opensearch:latest
-docker pull opensearchproject/opensearch-dashboards:latest
-
-docker run -d -p 9200:9200 -p 9600:9600 -e "discovery.type=single-node" opensearchproject/opensearch:latest
-
-https://localhost:9200/
-
-curl https://localhost:9200 -ku 'admin:admin'
-
-
- -e "discovery.type=single-node"
-
-http://localhost:5601/
-
- docker compose -f .\docker-compose-opensearch-dashboard-cert.yml up
-
-
-
-
-certificates
-https://github.com/flavienbwk/opensearch-docker-compose/blob/main/generate-certs.sh
-https://support.dnsimple.com/categories/ssl-certificates/
-
-OPENDISTRO_DN="/C=FR/ST=IDF/L=PARIS/O=EXAMPLE"   # Edit here and in opensearch.yml
-
-
-
-OPENDISTRO_DN="/C=DK/ST=IDF/L=AARHUS/O=OPENSEARCH"   # Edit here and in opensearch.yml
-
-CN = localhost
-CN = bdykgl
-OU = Standard
-OU = Users
-OU = Bankdata
-OU = Hosting
-DC = d101p
-DC = bdpnet
-DC = dk
 
 
 ## run this:
 
-$NODE_NAME = opensearch-node
-$DASHBOARD_NAME = os-dashboards
+$NODE_NAME = "opensearch-node"
+$DASHBOARD_NAME = "os-dashboards"
 
 mkdir -p certs
 mkdir -p certs/ca
@@ -72,31 +30,26 @@ openssl genrsa -out certs/$DASHBOARD_NAME/$DASHBOARD_NAME-temp.key 2048
 openssl pkcs8 -inform PEM -outform PEM -in certs/$DASHBOARD_NAME/$DASHBOARD_NAME-temp.key -topk8 -nocrypt -v1 PBE-SHA1-3DES -out certs/$DASHBOARD_NAME/$DASHBOARD_NAME.key
 openssl req -new -subj "$OPENDISTRO_DN/CN=$DASHBOARD_NAME" -key certs/$DASHBOARD_NAME/$DASHBOARD_NAME.key -out certs/$DASHBOARD_NAME/$DASHBOARD_NAME.csr
 openssl x509 -req -in certs/$DASHBOARD_NAME/$DASHBOARD_NAME.csr -CA certs/ca/ca.pem -CAkey certs/ca/ca.key -CAcreateserial -sha256 -out certs/$DASHBOARD_NAME/$DASHBOARD_NAME.pem
-rm certs/$DASHBOARD_NAME/$DASHBOARD_NAME-temp.key
-rm certs/os-dashboards/os-dashboards.csr
+
+Remove-Item certs/$DASHBOARD_NAME/$DASHBOARD_NAME-temp.key
+Remove-Item certs/$DASHBOARD_NAME/$DASHBOARD_NAME.csr
     
-
-
 openssl genrsa -out "certs/$NODE_NAME/$NODE_NAME-temp.key" 2048
 openssl pkcs8 -inform PEM -outform PEM -in "certs/$NODE_NAME/$NODE_NAME-temp.key" -topk8 -nocrypt -v1 PBE-SHA1-3DES -out "certs/$NODE_NAME/$NODE_NAME.key"
 openssl req -new -subj "$OPENDISTRO_DN/CN=$NODE_NAME" -key "certs/$NODE_NAME/$NODE_NAME.key" -out "certs/$NODE_NAME/$NODE_NAME.csr"
-openssl x509 -req -extfile <(printf "subjectAltName=DNS:localhost,IP:127.0.0.1,DNS:$NODE_NAME") -in "certs/$NODE_NAME/$NODE_NAME.csr" -CA certs/ca/ca.pem -CAkey certs/ca/ca.key -CAcreateserial -sha256 -out "certs/$NODE_NAME/$NODE_NAME.pem"
+
+#openssl x509 -req -extfile <(printf "subjectAltName=DNS:localhost,IP:127.0.0.1,DNS:$NODE_NAME") -in "certs/$NODE_NAME/$NODE_NAME.csr" -CA certs/ca/ca.pem -CAkey certs/ca/ca.key -CAcreateserial -sha256 -out "certs/$NODE_NAME/$NODE_NAME.pem"
 
 $subjectAltName = "subjectAltName=DNS:localhost,IP:127.0.0.1,DNS:$NODE_NAME"
 $extFile = New-TemporaryFile
 $subjectAltName | Out-File -Append -NoNewline -Encoding utf8 -FilePath $extFile.FullName
 openssl x509 -req -extfile $extFile.FullName -in "certs/$NODE_NAME/$NODE_NAME.csr" -CA "certs/ca/ca.pem" -CAkey "certs/ca/ca.key" -CAcreateserial -sha256 -out "certs/$NODE_NAME/$NODE_NAME.pem"
+
 Remove-Item -Path $extFile.FullName
-
-rm "certs/$NODE_NAME/$NODE_NAME-temp.key" 
-rm "certs/$NODE_NAME/$NODE_NAME.csr"
-
+Remove-Item "certs/$NODE_NAME/$NODE_NAME-temp.key" 
+Remove-Item "certs/$NODE_NAME/$NODE_NAME.csr"
 
 
 
-
-
-
-
-chmod -R 750 ./certs
-chown -R $USER:1000 ./certs
+#chmod -R 750 ./certs
+#chown -R $USER:1000 ./certs
