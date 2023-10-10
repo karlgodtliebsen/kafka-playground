@@ -3,6 +3,7 @@ services:
   opensearch-node:
     image: opensearchproject/opensearch:latest
     container_name: opensearch-node
+    user: 1000:1000 #1001:1001 #admin
     environment:
       - cluster.name=opensearch-cluster # Name the cluster
       - node.name=opensearch-node # Name the node that will run in this container
@@ -30,12 +31,16 @@ services:
   opensearch-dashboards:
     image: opensearchproject/opensearch-dashboards:latest # Make sure the version of opensearch-dashboards matches the version of opensearch installed on other nodes
     container_name: opensearch-dashboards
+    user: 1000:1000 #1001:1001 #admin
     ports:
       - 5601:5601 # Map host port 5601 to container port 5601
     expose:
       - "5601" # Expose port 5601 for web access to OpenSearch Dashboards
     environment:
       OPENSEARCH_HOSTS: '["http://opensearch-node:9200"]' # Define the OpenSearch nodes that OpenSearch Dashboards will query
+    volumes:
+      #- ./opensearch-dashboards.yml:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml
+      - "/projects/opensearch/opensearch-dashboards.yml:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml"
     networks:
       - opensearch-net
       

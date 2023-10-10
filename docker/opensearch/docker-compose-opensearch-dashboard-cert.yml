@@ -51,7 +51,7 @@ services:
         max-file: "1"
     volumes:
       - "/projects/opensearch/certs:/usr/share/opensearch-dashboards/config/certificates:ro"
-      #- "/projects/opensearch/opensearch-dashboards.yml:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml"
+      - "/projects/opensearch/opensearch-dashboards.yml:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml"
     ports:
       - 5601:5601
 
