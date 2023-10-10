@@ -6,6 +6,52 @@ docker pull opensearchproject/opensearch:latest
 docker pull opensearchproject/opensearch-dashboards:latest
 
 docker run -d -p 9200:9200 -p 9600:9600 -e "discovery.type=single-node" opensearchproject/opensearch:latest
+sudo docker run -d -p 9200:9200 -p 9600:9600 -e "discovery.type=single-node" opensearchproject/opensearch:latest
+
+
+
+User for permissions to volumes:
+
+Create an opensearch  User:
+
+sudo adduser opensearch
+
+You'll be prompted to set a password for the new user and provide some optional user information. 
+If you don't want to set any additional information, you can just press Enter to skip through the prompts.
+
+To ensure that the user was created successfully, you can check the contents of the /etc/passwd file:
+
+
+
+grep opensearch /etc/passwd
+This should return a line with details about the opensearch user, indicating that the user was created successfully.
+
+
+
+sudo chown -R opensearch /usr/share/opensearch/data
+sudo chown -R opensearch /projects/opensearch/opensearch-data
+
+or 
+
+sudo chown -R 1000:1000 /usr/share/opensearch/data
+sudo chown -R 1000:1000 /projects/opensearch/opensearch-data
+
+
+sudo docker run as current user:
+sudo docker run -u $(id -u):$(id -g) ...
+
+
+add to yml file:
+
+user: "${UID}:${GID}"
+
+Current User:
+if running current user:
+
+sudo UID=$(id -u) GID=$(id -g) docker-compose  -f docker-compose-opensearch-dashboard.yml up -d
+
+
+
 
 https://localhost:9200/
 
@@ -27,3 +73,6 @@ https://support.dnsimple.com/categories/ssl-certificates/
 /usr/share/opensearch/data/nodes
 
 sudo chown -R 1000:1000 /usr/share/opensearch/
+
+chmod -R 750 /usr/share/opensearch
+chown -R $USER:1000 /usr/share/opensearch/
