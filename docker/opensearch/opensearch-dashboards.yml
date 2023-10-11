@@ -1,5 +1,7 @@
 server.name: os_dashboards
 server.host: "0.0.0.0"
+opensearch.hosts: [http://localhost:9200]
+opensearch.ssl.verificationMode: none
 
 opensearch.username: "admin"
 opensearch.password: "admin"

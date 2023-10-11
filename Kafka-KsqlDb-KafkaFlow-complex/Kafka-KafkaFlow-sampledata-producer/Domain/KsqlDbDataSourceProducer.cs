@@ -23,7 +23,7 @@ public sealed class KsqlDbDataSourceProducer
     public async Task Run(CancellationToken cancellationToken)
     {
 
-        Console.WriteLine("Starting identity mapping data production to IdentityMaæ....");
+        Console.WriteLine("Starting identity mapping data production to IdentityMap....");
         const int count = 10000;
         IList<string> identities = new List<string>(count * 2);
         var bus = provider.CreateKafkaBus();

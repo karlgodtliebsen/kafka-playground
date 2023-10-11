@@ -25,6 +25,7 @@ public static class KafkaConfigurator
                 .AddCluster(
                     cluster => cluster
                         .WithBrokers(new[] { config.Broker })
+                        
                         .AddConsumer(
                             consumer =>
                             //    consumer.AddConsumer<ProtobufNetSerializer, PrintConsoleMiddleware1>(config, "")
