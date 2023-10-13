@@ -9,13 +9,13 @@ using Microsoft.Extensions.Options;
 namespace KsqlDb.Domain;
 
 
-public sealed class KsqlDbDataSourceProducer
+public sealed class DataSourceProducer
 {
 
     private readonly IServiceProvider provider;
     private readonly KafkaFlowConfiguration config;
     private static int counter = 0;
-    public KsqlDbDataSourceProducer(IServiceProvider provider, IOptions<KafkaFlowConfiguration> options)
+    public DataSourceProducer(IServiceProvider provider, IOptions<KafkaFlowConfiguration> options)
     {
         this.provider = provider;
         this.config = options.Value;
