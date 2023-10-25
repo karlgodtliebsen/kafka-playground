@@ -8,31 +8,31 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Confluent.Kafka" Version="2.2.0" />
-		<PackageReference Include="KafkaFlow" Version="2.5.0-beta.11" />
-		<PackageReference Include="KafkaFlow.Abstractions" Version="2.5.0-beta.11" />
-		<PackageReference Include="KafkaFlow.Admin" Version="2.5.0-beta.11" />
-		<PackageReference Include="KafkaFlow.Admin.WebApi" Version="2.5.0-beta.11" />
-		<PackageReference Include="KafkaFlow.BatchConsume" Version="2.5.0-beta.11" />
-		<PackageReference Include="KafkaFlow.Compressor" Version="2.5.0-beta.11" />
-		<PackageReference Include="KafkaFlow.Compressor.Gzip" Version="2.5.0-beta.11" />
-		<PackageReference Include="KafkaFlow.Extensions.Hosting" Version="2.5.0-beta.11" />
-		<PackageReference Include="KafkaFlow.LogHandler.Console" Version="2.5.0-beta.11" />
-		<PackageReference Include="KafkaFlow.LogHandler.Microsoft" Version="2.5.0-beta.11" />
-		<PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" Version="2.5.0-beta.11" />
+		<PackageReference Include="Confluent.Kafka" Version="2.3.0" />
+		<PackageReference Include="KafkaFlow" Version="2.5.0" />
+		<PackageReference Include="KafkaFlow.Abstractions" Version="2.5.0" />
+		<PackageReference Include="KafkaFlow.Admin" Version="2.5.0" />
+		<PackageReference Include="KafkaFlow.Admin.WebApi" Version="2.5.0" />
+		<PackageReference Include="KafkaFlow.BatchConsume" Version="2.5.0" />
+		<PackageReference Include="KafkaFlow.Compressor" Version="2.5.0" />
+		<PackageReference Include="KafkaFlow.Compressor.Gzip" Version="2.5.0" />
+		<PackageReference Include="KafkaFlow.Extensions.Hosting" Version="2.5.0" />
+		<PackageReference Include="KafkaFlow.LogHandler.Console" Version="2.5.0" />
+		<PackageReference Include="KafkaFlow.LogHandler.Microsoft" Version="2.5.0" />
+		<PackageReference Include="KafkaFlow.Microsoft.DependencyInjection" Version="2.5.0" />
 		<PackageReference Include="KafkaFlow.Retry" Version="2.1.2" />
 		<PackageReference Include="KafkaFlow.Retry.Postgres" Version="2.1.2" />
-		<PackageReference Include="KafkaFlow.SchemaRegistry" Version="2.5.0-beta.11" />
-		<PackageReference Include="KafkaFlow.Serializer" Version="2.5.0-beta.11" />
+		<PackageReference Include="KafkaFlow.SchemaRegistry" Version="2.5.0" />
+		<PackageReference Include="KafkaFlow.Serializer" Version="2.5.0" />
 		<PackageReference Include="KafkaFlow.Serializer.ApacheAvro" Version="1.5.8" />
 		<PackageReference Include="KafkaFlow.Serializer.Json" Version="1.5.8" />
-		<PackageReference Include="KafkaFlow.Serializer.JsonCore" Version="2.5.0-beta.11" />
+		<PackageReference Include="KafkaFlow.Serializer.JsonCore" Version="2.5.0" />
 		<PackageReference Include="KafkaFlow.Serializer.MessagePack" Version="1.0.0" />
 		<PackageReference Include="KafkaFlow.Serializer.ProtoBuf" Version="1.5.8" />
-		<PackageReference Include="KafkaFlow.Serializer.SchemaRegistry.ConfluentAvro" Version="2.4.1" />
-		<PackageReference Include="KafkaFlow.Serializer.SchemaRegistry.ConfluentJson" Version="2.4.1" />
-		<PackageReference Include="KafkaFlow.Serializer.SchemaRegistry.ConfluentProtobuf" Version="2.5.0-beta.11" />
-		<PackageReference Include="KafkaFlow.TypedHandler" Version="2.5.0-beta.11" />
+		<PackageReference Include="KafkaFlow.Serializer.SchemaRegistry.ConfluentAvro" Version="2.5.0" />
+		<PackageReference Include="KafkaFlow.Serializer.SchemaRegistry.ConfluentJson" Version="2.5.0" />
+		<PackageReference Include="KafkaFlow.Serializer.SchemaRegistry.ConfluentProtobuf" Version="2.5.0" />
+		<PackageReference Include="KafkaFlow.TypedHandler" Version="2.5.0" />
 
 		<PackageReference Include="Testcontainers" Version="3.5.0" />
 
@@ -40,7 +40,7 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.4" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Ini" Version="7.0.0" />
 		<PackageReference Include="Testcontainers.Kafka" Version="3.5.0" />
-		<PackageReference Include="Ulid" Version="1.3.1" />
+		<PackageReference Include="Ulid" Version="1.3.3" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\KafkaFlow-Messages\KafkaFlow-Messages.csproj" />
