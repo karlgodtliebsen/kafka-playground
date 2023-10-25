@@ -4,11 +4,11 @@ using Microsoft.Extensions.Hosting;
 
 namespace KsqlDb.HostServices;
 
-public class KsqlDbProducerService : BackgroundService
+public class ProducerService : BackgroundService
 {
-    private readonly KsqlDbDataSourceProducer producer;
+    private readonly DataSourceProducer producer;
 
-    public KsqlDbProducerService(KsqlDbDataSourceProducer producer)
+    public ProducerService(DataSourceProducer producer)
     {
         this.producer = producer;
     }

@@ -19,8 +19,8 @@ public static class KafkaFlowControlConfigurator
         sectionName = sectionName ?? KafkaFlowConfiguration.SectionName;
         services.Configure<KafkaFlowConfiguration>(configuration.GetSection(sectionName));
         var config = configuration.GetSection(sectionName).Get<KafkaFlowConfiguration>()!;
-        services.AddTransient<KsqlDbDataSourceProducer>();
-        services.AddHostedService<KsqlDbProducerService>();
+        services.AddTransient<DataSourceProducer>();
+        services.AddHostedService<ProducerService>();
 
         services.AddKafka(
             kafka => kafka
