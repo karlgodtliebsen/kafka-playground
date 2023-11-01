@@ -3,17 +3,21 @@
 
 Includes many aspects of the Kafka world from a .Net perspective :
 
-
+## Confluent .Net Client
 Confluent.Kafka nuget package to create Producer and Consumer in the folder Kafka-simple-producer-consumer:
 - Simple-Producer
 - Simple-Consumer
 
-Confluent.Kafka nuget package to create a Stream Client in the folder Kafka-streaming-WikiEdit:
+## Streamiz Kafka .NET
+Streamiz Kafka .NET nuget package to create a Stream Client in the folder Kafka-streaming-WikiEdit:
 - WikiEditStream 
 - WikiEditStream.Tests
+- Reference:
+	- https://github.com/LGouellec/kafka-streams-dotnet
+
 - This project also includes a .Net TestContainer Setup for Confluent Docker Compose
 
-
+## ksqlDb:
 Confluent ksqlDb for .Net in the folder Kafka-KsqlDb:
 
 - KsqlDb using ksqlDB.RestApi.Client and Confluent.Kafka nuget packages.
@@ -24,17 +28,15 @@ Test integration in the project KsqlDb/KsqlDb.Tests of
 - KsqlDb using .Net Clients
 - Using TestContainers.Net to create docker instances similar to docker-compose for Kafka
 
-
+## KafkaFlow
 Farfetch KafkaFlow in an adapted sample, in the Kafka-KafkaFlow folder
 - Consumer
 - Producer
 - FlowControl
-
 - References:
-- https://github.com/farfetch
-- https://farfetch.github.io/kafkaflow/
-- https://www.infoq.com/articles/kafkaflow-dotnet-framework/?itm_source=infoq&itm_medium=popular_widget&itm_campaign=popular_content_list&itm_content=
-
+	- https://github.com/farfetch
+	- https://farfetch.github.io/kafkaflow/
+	- https://www.infoq.com/articles/kafkaflow-dotnet-framework/?itm_source=infoq&itm_medium=popular_widget&itm_campaign=popular_content_list&itm_content=
 
 A complex ksqlDb scenario that includes multiple streams, tables ksql queries (ksql queries documented in the README.md file.
 - Kafka-KafkaFlow-sampledata-producer (Sampledata producers written in KafkaFlow)
@@ -42,7 +44,8 @@ A complex ksqlDb scenario that includes multiple streams, tables ksql queries (k
 
 
 
-Integration of .NET for Apache® Spark™ (The .NET for Apache Spark project is part of the .NET Foundation.)
+
+Integration of .NET for ApacheÂ® Sparkâ„¢ (The .NET for Apache Spark project is part of the .NET Foundation.)
 
 Must read:
 
