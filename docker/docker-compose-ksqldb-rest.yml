@@ -1,76 +1,156 @@
 version: '3.8'
 
 networks:
-  ksqldbnetwork:
+  kafka-network:
     driver: bridge
+
+volumes:
+  zookeeper_data:
+    driver: local
+  kafka_data:
+    driver: local
 
 services:
   zookeeper:
-    image: 'bitnami/zookeeper:latest'
+    image: 'bitnami/zookeeper:3.9.1'
+    container_name: zookeeper
     ports:
       - '2181:2181'
     networks: 
-      - ksqldbnetwork
+      - kafka-network
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
+      - ZOO_ENABLE_AUTH=no
+      - ZOO_HEAP_SIZE=512
+    volumes:
+      - zookeeper_data:/bitnami/zookeeper
+    healthcheck:
+      test: ["CMD-SHELL", "echo ruok | nc localhost 2181 | grep imok"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   broker01:
-    image: 'bitnami/kafka:latest'
+    image: 'bitnami/kafka:3.6.1'
+    container_name: broker01
     ports:
       - '29092:29092'
+      - '9092:9092'
     networks: 
-      - ksqldbnetwork
+      - kafka-network
     environment:
       - KAFKA_BROKER_ID=1
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
       - KAFKA_CFG_LISTENERS=CLIENT://broker01:9092,EXTERNAL://broker01:29092
       - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://broker01:9092,EXTERNAL://localhost:29092
-      - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
-      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
-  #    - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=false
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_CFG_NUM_PARTITIONS=3
+      - KAFKA_CFG_DEFAULT_REPLICATION_FACTOR=1
+      - KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_CFG_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
+      - KAFKA_CFG_TRANSACTION_STATE_LOG_MIN_ISR=1
+      - KAFKA_HEAP_OPTS=-Xmx1024m -Xms1024m
+    volumes:
+      - kafka_data:/bitnami/kafka
     depends_on:
-      - zookeeper
+      zookeeper:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics.sh --bootstrap-server localhost:9092 --list"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   kafdrop:
-    image: obsidiandynamics/kafdrop:3.30.0
+    image: obsidiandynamics/kafdrop:4.0.1
+    container_name: kafdrop
     depends_on:
-      - broker01
+      broker01:
+        condition: service_healthy
     ports:
       - "9000:9000"
     networks: 
-      - ksqldbnetwork
+      - kafka-network
     environment:
       - KAFKA_BROKERCONNECT=broker01:9092
-      - JVM_OPTS=-Xms32M -Xms64M
+      - JVM_OPTS=-Xms64M -Xmx128M
       - SERVER_SERVLET_CONTEXTPATH=/
-            
-  connect:
-    image: debezium/connect:2.0
+      - CMD_ARGS=--message.format=AVRO --schemaregistry.connect=http://schema-registry:8081
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9000"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Optional: Add Schema Registry for better AVRO support
+  schema-registry:
+    image: confluentinc/cp-schema-registry:7.6.1
+    container_name: schema-registry
+    depends_on:
+      broker01:
+        condition: service_healthy
     ports:
-     - 8083:8083
+      - "8081:8081"
+    networks:
+      - kafka-network
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'broker01:9092'
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+      SCHEMA_REGISTRY_KAFKASTORE_TOPIC_REPLICATION_FACTOR: 1
+      SCHEMA_REGISTRY_DEBUG: 'true'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/subjects"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  connect:
+    image: debezium/connect:2.5.0.Final
+    container_name: connect
+    ports:
+     - "8083:8083"
     networks: 
-      - ksqldbnetwork
-    links:
-     - broker01
+      - kafka-network
+    depends_on:
+      broker01:
+        condition: service_healthy
     environment:
      - BOOTSTRAP_SERVERS=broker01:9092
-     - GROUP_ID=1
-     - CONFIG_STORAGE_TOPIC=my_connect_configs
-     - OFFSET_STORAGE_TOPIC=my_connect_offsets
-     - STATUS_STORAGE_TOPIC=my_source_connect_statuses
+     - GROUP_ID=debezium-connect-cluster
+     - CONFIG_STORAGE_TOPIC=connect_configs
+     - OFFSET_STORAGE_TOPIC=connect_offsets
+     - STATUS_STORAGE_TOPIC=connect_statuses
+     - CONFIG_STORAGE_REPLICATION_FACTOR=1
+     - OFFSET_STORAGE_REPLICATION_FACTOR=1
+     - STATUS_STORAGE_REPLICATION_FACTOR=1
+     - CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL=http://schema-registry:8081
+     - CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL=http://schema-registry:8081
+     - ENABLE_DEBEZIUM_SCRIPTING=true
+    volumes:
+      - ./debezium-connectors:/kafka/connect/debezium-connectors
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/connectors"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   ksqldb-server:
-    image: confluentinc/ksqldb-server:${KSQLDB_VERSION}
+    image: confluentinc/ksqldb-server:0.29.0
     hostname: ksqldb-server
     container_name: ksqldb-server
     depends_on:
-      - broker01
-      - connect
+      broker01:
+        condition: service_healthy
+      connect:
+        condition: service_healthy
     ports:
       - "8088:8088"
     networks: 
-      - ksqldbnetwork
+      - kafka-network
     environment:
       KSQL_CONFIG_DIR: "/etc/ksql"
       KSQL_BOOTSTRAP_SERVERS: "broker01:9092"
@@ -78,14 +158,81 @@ services:
       KSQL_KSQL_CONNECT_URL: "http://connect:8083"
       KSQL_LISTENERS: "http://0.0.0.0:8088"
       KSQL_CACHE_MAX_BYTES_BUFFERING: 0
-
+      KSQL_KSQL_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+      KSQL_PRODUCER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringProducerInterceptor"
+      KSQL_CONSUMER_INTERCEPTOR_CLASSES: "io.confluent.monitoring.clients.interceptor.MonitoringConsumerInterceptor"
+      KSQL_KSQL_LOGGING_PROCESSING_TOPIC_REPLICATION_FACTOR: 1
+      KSQL_KSQL_LOGGING_PROCESSING_TOPIC_AUTO_CREATE: 'true'
+      KSQL_KSQL_LOGGING_PROCESSING_STREAM_AUTO_CREATE: 'true'
+    volumes:
+      - ./ksqldb-data:/var/lib/kafka-streams
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8088/info"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   ksqldb-cli:
-    image: confluentinc/ksqldb-cli:${KSQLDB_VERSION}
+    image: confluentinc/ksqldb-cli:0.29.0
+    container_name: ksqldb-cli
     depends_on:
-      - broker01
-      - ksqldb-server
+      broker01:
+        condition: service_healthy
+      ksqldb-server:
+        condition: service_healthy
     networks: 
-      - ksqldbnetwork
+      - kafka-network
     entrypoint: /bin/sh
     tty: true
+
+  # Optional: Add Kafka UI as an alternative to Kafdrop
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    depends_on:
+      broker01:
+        condition: service_healthy
+      schema-registry:
+        condition: service_healthy
+      connect:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    networks:
+      - kafka-network
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: broker01:9092
+      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry:8081
+      KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME: connect
+      KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS: http://connect:8083
+      KAFKA_CLUSTERS_0_KSQLDBSERVER: http://ksqldb-server:8088
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Optional: REST Proxy for HTTP access to Kafka
+  rest-proxy:
+    image: confluentinc/cp-kafka-rest:7.6.1
+    container_name: rest-proxy
+    depends_on:
+      broker01:
+        condition: service_healthy
+      schema-registry:
+        condition: service_healthy
+    ports:
+      - "8082:8082"
+    networks:
+      - kafka-network
+    environment:
+      KAFKA_REST_HOST_NAME: rest-proxy
+      KAFKA_REST_BOOTSTRAP_SERVERS: 'broker01:9092'
+      KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
+      KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/v3/clusters"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
